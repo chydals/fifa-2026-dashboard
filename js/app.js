@@ -1,6 +1,6 @@
 /**
  * app.js - FIFA World Cup 2026 Core Dashboard Engine
- * Includes full 72 group stage pairings, Flag integrations, and active Standings calculations.
+ * Optimized match rendering loops, group stages, and filter systems.
  */
 
 // 1. Official 48-Team Groups & ISO Codes for Flag Generation
@@ -19,7 +19,7 @@ const worldCup2026Groups = [
   { group: "L", teams: [{name: "England", code: "gb-eng"}, {name: "Croatia", code: "hr"}, {name: "Ghana", code: "gh"}, {name: "Panama", code: "pa"}] }
 ];
 
-// Initialize dynamic standings storage tracking
+// Rebuild local live score calculations
 let standingsData = {};
 worldCup2026Groups.forEach(g => {
     standingsData[g.group] = g.teams.map(t => ({
@@ -27,7 +27,7 @@ worldCup2026Groups.forEach(g => {
     }));
 });
 
-// Full Match Schedule Database Array Builder
+// Generate all 72 group stage match configurations dynamically
 const matches = [];
 let matchIdCounter = 1;
 
@@ -56,20 +56,15 @@ worldCup2026Groups.forEach(g => {
     });
 });
 
-// Tab Navigation Controls
 window.switchTab = function(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    
-    const targetTab = document.getElementById(tabId);
-    if (targetTab) targetTab.classList.add('active');
-    
+    document.getElementById(tabId).classList.add('active');
     if (window.event && window.event.currentTarget) {
         window.event.currentTarget.classList.add('active');
     }
 };
 
-// Automatic Localized Time Converter
 function formatToTaiwanTime(utcString) {
     const date = new Date(utcString);
     return date.toLocaleString('zh-TW', {
@@ -78,7 +73,6 @@ function formatToTaiwanTime(utcString) {
     }) + ' (台灣時間)';
 }
 
-// Render Standings UI Panels
 function renderGroups() {
     const container = document.getElementById('groups-container');
     if (!container) return;
@@ -116,16 +110,15 @@ function renderGroups() {
     }
 }
 
-// Render Fixture Matchcards UI Panels
 window.renderFixtures = function() {
     const listContainer = document.getElementById('match-list');
     if (!listContainer) return;
-    
-    const filterEl = document.getElementById('stage-filter');
-    const filterValue = filterEl ? filterEl.value : 'all';
+    const filterValue = document.getElementById('stage-filter').value;
     listContainer.innerHTML = '';
 
-    matches.forEach(match => {
+    const filteredMatches = matches.filter(m => filterValue === 'all' || m.group === filterValue);
+
+    filteredMatches.forEach(match => {
         const card = document.createElement('div');
         card.className = 'match-card';
         card.innerHTML = `
@@ -148,7 +141,6 @@ window.renderFixtures = function() {
     });
 };
 
-// Score Entry Change Event Listener
 window.updateScore = function(inputEl) {
     const matchId = parseInt(inputEl.dataset.matchId);
     const type = inputEl.dataset.team;
@@ -162,13 +154,11 @@ window.updateScore = function(inputEl) {
     recalculateGroupStandings();
 };
 
-// Dynamic Standings Re-Calculation Engine Matrix
 function recalculateGroupStandings() {
     for (const groupLetter of Object.keys(standingsData)) {
-        const groupRef = worldCup2026Groups.find(g => g.group === groupLetter);
-        standingsData[groupLetter] = groupRef.teams.map(t => ({
-            name: t.name, code: t.code, p: 0, w: 0, d: 0, l: 0, gd: 0, pts: 0
-        }));
+        standingsData[groupLetter] = worldCup2026Groups
+            .find(g => g.group === groupLetter).teams
+            .map(t => ({ name: t.name, code: t.code, p: 0, w: 0, d: 0, l: 0, gd: 0, pts: 0 }));
     }
 
     matches.forEach(m => {
@@ -180,30 +170,18 @@ function recalculateGroupStandings() {
             if (homeTeam && awayTeam) {
                 const hSc = parseInt(m.homeScore);
                 const aSc = parseInt(m.awayScore);
+                homeTeam.p++; awayTeam.p++;
+                homeTeam.gd += (hSc - aSc); awayTeam.gd += (aSc - hSc);
 
-                homeTeam.p++;
-                awayTeam.p++;
-                homeTeam.gd += (hSc - aSc);
-                awayTeam.gd += (aSc - hSc);
-
-                if (hSc > aSc) {
-                    homeTeam.w++; homeTeam.pts += 3;
-                    awayTeam.l++;
-                } else if (aSc > hSc) {
-                    awayTeam.w++; awayTeam.pts += 3;
-                    homeTeam.l++;
-                } else {
-                    homeTeam.d++; homeTeam.pts += 1;
-                    awayTeam.d++; awayTeam.pts += 1;
-                }
+                if (hSc > aSc) { homeTeam.w++; homeTeam.pts += 3; awayTeam.l++; }
+                else if (aSc > hSc) { awayTeam.w++; awayTeam.pts += 3; homeTeam.l++; }
+                else { homeTeam.d++; homeTeam.pts += 1; awayTeam.d++; awayTeam.pts += 1; }
             }
         }
     });
-
     renderGroups();
 }
 
-// Initial Kick-off execution when document parsing is finished
 document.addEventListener('DOMContentLoaded', () => {
     renderGroups();
     renderFixtures();
