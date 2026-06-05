@@ -3,149 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIFA World Cup 2026™ Hub</title>
+    <title>FIFA World Cup 2026 Dashboard Tracker</title>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
 
+    <!-- Main Header with High-Contrast Branding & Official Mascots -->
     <header>
-        <div class="brand-container">
-            <svg class="fifa-wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
-                <path d="M45 25h65v18H66v18h36v18H66v26H45V25zm80 0h21v80h-21V25zm40 0h60v18h-39v15h32v18h-32v29h-21V25zm115 0h21l25 80h-22l-5-18h-22l-5 18h-22l25-80zm4 44l-7-25-7 25h14z" fill="#ffffff"/>
-            </svg>
-            <div class="brand-divider"></div>
-            <svg class="fifa-logo-2026" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130">
-                <path d="M40,5 C40,2 43,0 50,0 C57,0 60,2 60,5 L60,85 C60,88 57,90 50,90 C43,90 40,88 40,85 Z" fill="#ffffff"/>
-                <circle cx="50" cy="112" r="14" fill="#c6a15b"/>
-                <path d="M42,106 L53,106 L45,118 L56,118" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M15,40 Q50,45 85,40" stroke="#c6a15b" stroke-width="2" fill="none"/>
-                <path d="M15,65 Q50,70 85,65" stroke="#c6a15b" stroke-width="2" fill="none"/>
-            </svg>
+        <div class="logo-wrapper">
+            <!-- Official High-Contrast Emblem Layer -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/2026_FIFA_World_Cup_emblem.svg" alt="FIFA World Cup 2026 Official Logo" class="main-wc-logo">
         </div>
-        <h1>FIFA WORLD CUP 2026</h1>
-        <p>Official 48-Team Tracker &bull; Taiwan Time (UTC+8)</p>
+        <h1>FIFA World Cup 2026</h1>
+        <p class="header-subtitle">Official 48-Team Tournament Platform &bull; Live Tracker</p>
+        
+        <!-- Official Tournament Mascots Segment -->
+        <div class="mascots-container">
+            <div class="mascot-card">
+                <span class="mascot-flag">🇨🇦</span>
+                <h4>Maple™</h4>
+                <p>The Moose</p>
+            </div>
+            <div class="mascot-card">
+                <span class="mascot-flag">🇲🇽</span>
+                <h4>Zayu™</h4>
+                <p>The Jaguar</p>
+            </div>
+            <div class="mascot-card">
+                <span class="mascot-flag">🇺🇸</span>
+                <h4>Clutch™</h4>
+                <p>The Bald Eagle</p>
+            </div>
+        </div>
     </header>
 
-    <div class="tabs">
+    <!-- Navigation Tab System -->
+    <nav class="tabs">
         <button class="tab-btn active" onclick="switchTab('groups')">Groups & Standings</button>
-        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures Calendar (72 Matches)</button>
+        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures</button>
         <button class="tab-btn" onclick="switchTab('bracket')">Knockout Brackets</button>
-    </div>
+        <button class="tab-btn" onclick="switchTab('venues')">Host Venues</button>
+    </nav>
 
-    <div id="groups" class="tab-content active">
+    <!-- TAB 1: Groups & Standings Engine -->
+    <main id="groups" class="tab-content active">
+        <!-- 12 Dynamic Group Cards Container (A to L) -->
         <div class="groups-grid" id="groups-container"></div>
-    </div>
+        
+        <!-- Dynamic Ranking of Third-Placed Teams Block -->
+        <div class="third-place-wrapper">
+            <div class="section-title-block">
+                <h3>Ranking of Third-Placed Teams</h3>
+                <p class="subtitle">The top 8 best performing third-placed teams advance to the Round of 32</p>
+            </div>
+            <div class="table-responsive">
+                <table class="third-place-table">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Group</th>
+                            <th class="text-left">Team</th>
+                            <th>Pld</th>
+                            <th>W</th>
+                            <th>D</th>
+                            <th>L</th>
+                            <th>GF</th>
+                            <th>GA</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="third-place-tbody">
+                        <!-- Populated dynamically via JavaScript calculations -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
-    <div id="fixtures" class="tab-content">
-        <div class="fixtures-container">
+    <!-- TAB 2: Match Fixtures Module -->
+    <section id="fixtures" class="tab-content">
+        <div class="fixtures-wrapper">
             <div class="filter-bar">
-                <label for="stage-filter">Filter Group Calendar:</label>
+                <label for="stage-filter">Filter Stage: </label>
                 <select id="stage-filter" onchange="renderFixtures()">
-                    <option value="all">Show All 72 Group Stage Matches</option>
-                    <option value="A">Group A</option>
-                    <option value="B">Group B</option>
-                    <option value="C">Group C</option>
-                    <option value="D">Group D</option>
-                    <option value="E">Group E</option>
-                    <option value="F">Group F</option>
-                    <option value="G">Group G</option>
-                    <option value="H">Group H</option>
-                    <option value="I">Group I</option>
-                    <option value="J">Group J</option>
-                    <option value="K">Group K</option>
-                    <option value="L">Group L</option>
+                    <option value="all">Show All 104 Matches</option>
+                    <option value="Group Stage">Group Stage Only</option>
+                    <option value="Round of 32">Round of 32</option>
+                    <option value="Round of 16">Round of 16</option>
+                    <option value="Quarter-finals">Quarter-finals</option>
+                    <option value="Semi-finals">Semi-finals</option>
+                    <option value="Final">Final</option>
                 </select>
             </div>
-            <div id="match-list"></div>
+            <div id="match-list" class="match-list-grid"></div>
         </div>
-    </div>
+    </section>
 
-    <div id="bracket" class="tab-content">
-        <nav class="mobile-bracket-nav">
-            <a href="#r16-anchor">Round of 16</a>
-            <a href="#qf-anchor">Quarter-finals</a>
-            <a href="#sf-anchor">Semi-finals</a>
-            <a href="#finals-anchor">Finals</a>
-        </nav>
-
-        <div class="bracket-container">
-            
-            <div class="bracket-round" id="r16-anchor">
-                <h4>Round of 16</h4>
-                <div class="bracket-split-wrapper">
-                    <div class="bracket-side-lane">
-                        <div class="lane-title">Left Side Bracket</div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M74</span> 06/30 04:30</div><div class="bracket-team"><span>1E</span></div><div class="bracket-team"><span>3ABCDF</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M77</span> 07/01 05:00</div><div class="bracket-team"><span>1I</span></div><div class="bracket-team"><span>3CDFGH</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M73</span> 06/29 03:00</div><div class="bracket-team"><span>2A</span></div><div class="bracket-team"><span>2B</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M75</span> 06/30 09:00</div><div class="bracket-team"><span>1F</span></div><div class="bracket-team"><span>2C</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M83</span> 07/03 07:00</div><div class="bracket-team"><span>2K</span></div><div class="bracket-team"><span>2L</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M84</span> 07/03 03:00</div><div class="bracket-team"><span>1H</span></div><div class="bracket-team"><span>2J</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M81</span> 07/02 08:00</div><div class="bracket-team"><span>1D</span></div><div class="bracket-team"><span>3BEFIJ</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M82</span> 07/02 04:00</div><div class="bracket-team"><span>1G</span></div><div class="bracket-team"><span>3AEHIJ</span></div></div>
-                    </div>
-                    <div class="bracket-side-lane">
-                        <div class="lane-title">Right Side Bracket</div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M76</span> 06/30 01:00</div><div class="bracket-team"><span>1C</span></div><div class="bracket-team"><span>2F</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M78</span> 07/01 01:00</div><div class="bracket-team"><span>2E</span></div><div class="bracket-team"><span>2I</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M79</span> 07/01 09:00</div><div class="bracket-team"><span>1A</span></div><div class="bracket-team"><span>3CEFHI</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M80</span> 07/02 00:00</div><div class="bracket-team"><span>1L</span></div><div class="bracket-team"><span>3EHIJK</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M86</span> 07/04 06:00</div><div class="bracket-team"><span>1J</span></div><div class="bracket-team"><span>2H</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M88</span> 07/04 02:00</div><div class="bracket-team"><span>2D</span></div><div class="bracket-team"><span>2G</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M85</span> 07/03 11:00</div><div class="bracket-team"><span>1B</span></div><div class="bracket-team"><span>3EFGIJ</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M87</span> 07/04 09:30</div><div class="bracket-team"><span>1K</span></div><div class="bracket-team"><span>3DEIJL</span></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bracket-round" id="qf-anchor">
-                <h4>Quarter-finals</h4>
-                <div class="bracket-split-wrapper">
-                    <div class="bracket-side-lane">
-                        <div class="lane-title">Left Side Bracket</div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M89</span> 07/05 05:00</div><div class="bracket-team"><span>Winner Match 74</span></div><div class="bracket-team"><span>Winner Match 77</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M90</span> 07/05 01:00</div><div class="bracket-team"><span>Winner Match 73</span></div><div class="bracket-team"><span>Winner Match 75</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M93</span> 07/07 03:00</div><div class="bracket-team"><span>Winner Match 83</span></div><div class="bracket-team"><span>Winner Match 84</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M94</span> 07/07 08:00</div><div class="bracket-team"><span>Winner Match 81</span></div><div class="bracket-team"><span>Winner Match 82</span></div></div>
-                    </div>
-                    <div class="bracket-side-lane">
-                        <div class="lane-title">Right Side Bracket</div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M91</span> 07/06 04:00</div><div class="bracket-team"><span>Winner Match 76</span></div><div class="bracket-team"><span>Winner Match 78</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M92</span> 07/06 08:00</div><div class="bracket-team"><span>Winner Match 79</span></div><div class="bracket-team"><span>Winner Match 80</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M95</span> 07/08 00:00</div><div class="bracket-team"><span>Winner Match 86</span></div><div class="bracket-team"><span>Winner Match 88</span></div></div>
-                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M96</span> 07/08 04:00</div><div class="bracket-team"><span>Winner Match 85</span></div><div class="bracket-team"><span>Winner Match 87</span></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bracket-round" id="sf-anchor">
-                <h4>Semi-finals</h4>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M97</span> 07/10 04:00</div><div class="bracket-team"><span>Winner Match 89</span></div><div class="bracket-team"><span>Winner Match 90</span></div></div>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M98</span> 07/11 03:00</div><div class="bracket-team"><span>Winner Match 93</span></div><div class="bracket-team"><span>Winner Match 94</span></div></div>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M99</span> 07/12 05:00</div><div class="bracket-team"><span>Winner Match 91</span></div><div class="bracket-team"><span>Winner Match 92</span></div></div>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M100</span> 07/12 09:00</div><div class="bracket-team"><span>Winner Match 95</span></div><div class="bracket-team"><span>Winner Match 96</span></div></div>
-            </div>
-
-            <div class="bracket-round" id="finals-anchor">
-                <h4>Finals & Play-off</h4>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M101</span> 07/15 03:00</div><div class="bracket-team"><span>Winner Match 97</span></div><div class="bracket-team"><span>Winner Match 98</span></div></div>
-                <div class="bracket-match"><div class="match-meta"><span class="m-id">M102</span> 07/16 03:00</div><div class="bracket-team"><span>Winner Match 99</span></div><div class="bracket-team"><span>Winner Match 100</span></div></div>
-                
-                <div class="bracket-match third-place-card">
-                    <div class="match-meta"><span class="m-id" style="background:#4b5563;">M103</span> Play-off for 3rd Place &bull; 07/19 05:00</div>
-                    <div class="bracket-team"><span>Runner-up M101</span></div>
-                    <div class="bracket-team"><span>Runner-up M102</span></div>
-                </div>
-
-                <div class="bracket-match grand-final-card">
-                    <div class="match-meta"><span class="m-id" style="background:#fcc419; color:#090a0f;">M104</span> WORLD CUP FINAL &bull; 07/20 03:00</div>
-                    <div class="bracket-team"><span>Winner Match 101</span></div>
-                    <div class="bracket-team"><span>Winner Match 102</span></div>
-                </div>
-            </div>
-
+    <!-- TAB 3: Re-Engineered Tree Structure Knockout Bracket -->
+    <section id="bracket" class="tab-content">
+        <div class="bracket-scroll-container">
+            <!-- JavaScript dynamically renders clear columns mapped directly with match venues -->
+            <div class="bracket-container" id="bracket-render-root"></div>
         </div>
-    </div>
+    </section>
+
+    <!-- TAB 4: Stadiums Database Viewport -->
+    <section id="venues" class="tab-content">
+        <div class="venues-grid" id="venues-container">
+            <!-- Populated with images, city info, and spectator capacities via app.js -->
+        </div>
+    </section>
+
+    <!-- Corporate Branding & Official Partners Footprint -->
+    <footer>
+        <div class="partners-title">Official FIFA World Cup 2026™ Partners</div>
+        <div class="partners-grid">
+            <div class="partner-logo-box">Aramco</div>
+            <div class="partner-logo-box">Adidas</div>
+            <div class="partner-logo-box">Coca-Cola</div>
+            <div class="partner-logo-box">Hyundai-Kia</div>
+            <div class="partner-logo-box">Qatar Airways</div>
+            <div class="partner-logo-box">Visa</div>
+        </div>
+        <p class="copyright-notice">&copy; 2026 International Football Architecture Dashboard. For personal management use.</p>
+    </footer>
 
     <script src="./js/app.js"></script>
 </body>
