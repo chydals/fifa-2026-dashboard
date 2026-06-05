@@ -1,7 +1,6 @@
 /**
  * app.js - Unified FIFA World Cup 2026 Core Dashboard Engine
- * Implements Group Phase calculations, Dynamic Third-Place Rankings,
- * Host Venue Data Modules, and Auto-populating Bracket Tree.
+ * Pristine Tournament State (All Teams on 0) with Taiwan Standard Time (TST) Schedules.
  */
 
 // ==========================================================================
@@ -24,94 +23,105 @@ const worldCup2026Groups = [
 
 // Complete 16 Official Host Venues Matrix Database
 const worldCupVenues = [
-    { name: "Estadio Azteca", city: "Mexico City, Mexico", capacity: "87,523", img: "https://upload.wikimedia.org/wikipedia/commons/4/41/Estadio_Azteca_2015.jpg" },
-    { name: "Estadio BBVA", city: "Guadalupe, Monterrey, Mexico", capacity: "53,500", img: "https://upload.wikimedia.org/wikipedia/commons/3/30/Estadio_BBVA_Bancomer_Panor%C3%A1mica.jpg" },
-    { name: "Estadio Akron", city: "Zapopan, Guadalajara, Mexico", capacity: "48,071", img: "https://upload.wikimedia.org/wikipedia/commons/a/ad/Estadio_Chivas_interior.jpg" },
-    { name: "BMO Field", city: "Toronto, Ontario, Canada", capacity: "45,736", img: "https://upload.wikimedia.org/wikipedia/commons/2/29/BMO_Field_Aug_2023.jpg" },
-    { name: "BC Place", city: "Vancouver, British Columbia, Canada", capacity: "54,500", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/BC_Place_Interior_2015.jpg" },
-    { name: "MetLife Stadium", city: "East Rutherford, New Jersey, USA", capacity: "82,500", img: "https://upload.wikimedia.org/wikipedia/commons/6/69/MetLife_Stadium_New_Jersey.jpg" },
-    { name: "SoFi Stadium", city: "Inglewood, California, USA", capacity: "70,240", img: "https://upload.wikimedia.org/wikipedia/commons/3/33/Sofi_Stadium%2C_Inglewood_Los_Angeles_California.jpg" },
-    { name: "AT&T Stadium", city: "Arlington, Texas, USA", capacity: "80,000", img: "https://upload.wikimedia.org/wikipedia/commons/7/77/AT%26T_Stadium_Interior.jpg" },
-    { name: "Mercedes-Benz Stadium", city: "Atlanta, Georgia, USA", capacity: "71,000", img: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Mercedes-Benz_Stadium_interior%2C_October_2017.jpg" },
-    { name: "Hard Rock Stadium", city: "Miami Gardens, Florida, USA", capacity: "64,767", img: "https://upload.wikimedia.org/wikipedia/commons/3/32/Hard_Rock_Stadium_Interior_2017.jpg" },
-    { name: "Lincoln Financial Field", city: "Philadelphia, Pennsylvania, USA", capacity: "69,796", img: "https://upload.wikimedia.org/wikipedia/commons/4/4c/LFF_Interior.jpg" },
-    { name: "Lumen Field", city: "Seattle, Washington, USA", capacity: "69,000", img: "https://upload.wikimedia.org/wikipedia/commons/3/37/CenturyLink_Field_aerial.jpg" },
-    { name: "Levi's Stadium", city: "Santa Clara, California, USA", capacity: "68,500", img: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Levi%27s_Stadium_aerial_view.jpg" },
-    { name: "Gillette Stadium", city: "Foxborough, Massachusetts, USA", capacity: "65,878", img: "https://upload.wikimedia.org/wikipedia/commons/c/c0/Gillette_Stadium_Patriots_vs_Jets_2019.jpg" },
-    { name: "Arrowhead Stadium", city: "Kansas City, Missouri, USA", capacity: "76,416", img: "https://upload.wikimedia.org/wikipedia/commons/1/1d/Arrowhead_Stadium_aerial.jpg" },
-    { name: "NRG Stadium", city: "Houston, Texas, USA", capacity: "72,220", img: "https://upload.wikimedia.org/wikipedia/commons/2/22/NRG_Stadium_Houston.jpg" }
+    { name: "Estadio Azteca", city: "Mexico City, Mexico", capacity: "87,523", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Vista_a%C3%A9rea_del_Estadio_Azteca_-_2026_-_02.jpg/250px-Vista_a%C3%A9rea_del_Estadio_Azteca_-_2026_-_02.jpg" },
+    { name: "Estadio BBVA", city: "Guadalupe, Monterrey, Mexico", capacity: "53,500", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Mexico_Guadalupe_Monterrey_Estadio_BBVA_Bancomer_fifa_world_cup_2026_6.JPG/250px-Mexico_Guadalupe_Monterrey_Estadio_BBVA_Bancomer_fifa_world_cup_2026_6.JPG" },
+    { name: "Estadio Akron", city: "Zapopan, Guadalajara, Mexico", capacity: "48,071", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Estadio_Akron_02-07-2022_cabecera_sur_lado_derecho.jpg/330px-Estadio_Akron_02-07-2022_cabecera_sur_lado_derecho.jpg" },
+    { name: "BMO Field", city: "Toronto, Ontario, Canada", capacity: "45,736", img: "https://static.cfl.ca/wp-content/uploads/sites/8/2017/06/DJI_0053.jpg" },
+    { name: "BC Place", city: "Vancouver, British Columbia, Canada", capacity: "54,500", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/BC_Place_%28Vancouver%29.jpg/250px-BC_Place_%28Vancouver%29.jpg" },
+    { name: "MetLife Stadium", city: "East Rutherford, New Jersey, USA", capacity: "82,500", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Metlife_stadium_%28Aerial_view%29.jpg/250px-Metlife_stadium_%28Aerial_view%29.jpg" },
+    { name: "SoFi Stadium", city: "Inglewood, California, USA", capacity: "70,240", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/SoFi_Stadium_interior_2021.jpg/250px-SoFi_Stadium_interior_2021.jpg" },
+    { name: "AT&T Stadium", city: "Arlington, Texas, USA", capacity: "80,000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Arlington_June_2020_4_%28AT%26T_Stadium%29.jpg/250px-Arlington_June_2020_4_%28AT%26T_Stadium%29.jpg" },
+    { name: "Mercedes-Benz Stadium", city: "Atlanta, Georgia, USA", capacity: "71,000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Mercedes_Benz_Stadium_time_lapse_capture_2017-08-13.jpg/250px-Mercedes_Benz_Stadium_time_lapse_capture_2017-08-13.jpg" },
+    { name: "Hard Rock Stadium", city: "Miami Gardens, Florida, USA", capacity: "64,767", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/200127-H-PX819-0092.jpg/330px-200127-H-PX819-0092.jpg" },
+    { name: "Lincoln Financial Field", city: "Philadelphia, Pennsylvania, USA", capacity: "69,796", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Lincoln_Financial_Field_%28Aerial_view%29.jpg/250px-Lincoln_Financial_Field_%28Aerial_view%29.jpg" },
+    { name: "Lumen Field", city: "Seattle, Washington, USA", capacity: "69,000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/CenturyLink_Field_Sounders_layout.jpg/330px-CenturyLink_Field_Sounders_layout.jpg" },
+    { name: "Levi's Stadium", city: "Santa Clara, California, USA", capacity: "68,500", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Levi%27s_Stadium_in_February_2016_prior_to_Super_Bowl_50_%2824398261729%29.jpg/250px-Levi%27s_Stadium_in_February_2016_prior_to_Super_Bowl_50_%2824398261729%29.jpg" },
+    { name: "Gillette Stadium", city: "Foxborough, Massachusetts, USA", capacity: "65,878", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gillette_Stadium_%28Top_View%29.jpg/250px-Gillette_Stadium_%28Top_View%29.jpg" },
+    { name: "Arrowhead Stadium", city: "Kansas City, Missouri, USA", capacity: "76,416", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Aerial_view_of_Arrowhead_Stadium_08-31-2013.jpg/250px-Aerial_view_of_Arrowhead_Stadium_08-31-2013.jpg" },
+    { name: "NRG Stadium", city: "Houston, Texas, USA", capacity: "72,220", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpg/250px-NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpgg" }
 ];
 
-// Array to store all 104 matches computed at runtime
+// Structural runtime arrays
 let worldCupMatches = [];
 let groupStandings = {};
 let thirdPlacedTeams = [];
 
 // ==========================================================================
-// 2. RUNTIME ENGINE INITIALIZATION & MATCH GENERATOR
+// 2. TIMELINE GENERATION ENGINE (Taiwan Standard Time - UTC+8 Calibration)
 // ==========================================================================
-function generate104Matches() {
+function generatePristine104Matches() {
     worldCupMatches = [];
     let matchId = 1;
 
-    // Generate Round-Robin Group Matches (6 games per group x 12 groups = 72 Group Games)
-    worldCup2026Groups.forEach(g => {
+    // Calendar blocks starting on June 12, 2026 (Taiwan Time kickoff)
+    // Matches spread naturally across standard slots: 03:00, 06:00, 09:00 TST
+    let baseGroupDate = new Date("2026-06-12T03:00:00+08:00"); 
+
+    worldCup2026Groups.forEach((g, gIdx) => {
         const t = g.teams;
-        const combinations = [
+        const pairings = [
             { h: t[0], a: t[1] }, { h: t[2], a: t[3] },
             { h: t[0], a: t[2] }, { h: t[1], a: t[3] },
             { h: t[3], a: t[0] }, { h: t[1], a: t[2] }
         ];
 
-        combinations.forEach(c => {
-            // Pick a randomized sample score for entertainment simulation
-            let homeSimScore = Math.floor(Math.random() * 4);
-            let awaySimScore = Math.floor(Math.random() * 3);
+        pairings.forEach((p, pIdx) => {
             let venueObj = worldCupVenues[matchId % worldCupVenues.length];
+            
+            // Increment dates progressively so matches advance logically across the June calendar
+            let matchDate = new Date(baseGroupDate.getTime());
+            matchDate.setDate(baseGroupDate.getDate() + Math.floor(matchId / 6) + (pIdx * 2));
+            matchDate.setHours(pIdx % 3 === 0 ? 3 : pIdx % 3 === 1 ? 6 : 9);
 
             worldCupMatches.push({
                 id: matchId++,
                 stage: "Group Stage",
                 group: g.group,
-                home: c.h,
-                away: c.a,
-                homeScore: homeSimScore,
-                awayScore: awaySimScore,
-                venue: venueObj.name
+                home: p.h,
+                away: p.a,
+                homeScore: null, // Pristine state: no scores loaded yet
+                awayScore: null,
+                venue: venueObj.name,
+                timeTST: matchDate.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + " (TST)"
             });
         });
     });
 
-    // Knockout Matches (32 matches total: 16 in R32, 8 in R16, 4 in QF, 2 in SF, 1 Third Place, 1 Final)
-    // 72 + 32 = 104 Total Tournament Matches
+    // Generate Single Elimination Knockouts with sequential late June / July dates
     const knockoutPhases = [
-        { name: "Round of 32", count: 16 },
-        { name: "Round of 16", count: 8 },
-        { name: "Quarter-finals", count: 4 },
-        { name: "Semi-finals", count: 2 },
-        { name: "Third Place Playoff", count: 1 },
-        { name: "Final", count: 1 }
+        { name: "Round of 32", count: 16, startDate: "2026-06-29T03:00:00+08:00" },
+        { name: "Round of 16", count: 8,  startDate: "2026-07-05T03:00:00+08:00" },
+        { name: "Quarter-finals", count: 4, startDate: "2026-07-10T06:00:00+08:00" },
+        { name: "Semi-finals", count: 2,  startDate: "2026-07-15T09:00:00+08:00" },
+        { name: "Third Place Playoff", count: 1, startDate: "2026-07-19T03:00:00+08:00" },
+        { name: "Final", count: 1,        startDate: "2026-07-20T03:00:00+08:00" }
     ];
 
     knockoutPhases.forEach(phase => {
+        let koDate = new Date(phase.startDate);
         for (let i = 0; i < phase.count; i++) {
             let venueObj = worldCupVenues[matchId % worldCupVenues.length];
+            let currentKODate = new Date(koDate.getTime());
+            currentKODate.setDate(koDate.getDate() + Math.floor(i / 2));
+            currentKODate.setHours(i % 2 === 0 ? 3 : 9);
+
             worldCupMatches.push({
                 id: matchId++,
                 stage: phase.name,
                 group: "KO",
-                home: `Winner M${matchId - 17}`, // Dynamically links progression tags
+                home: `Winner M${matchId - 17}`, 
                 away: `Winner M${matchId - 16}`,
                 homeScore: null,
                 awayScore: null,
-                venue: venueObj.name
+                venue: venueObj.name,
+                timeTST: currentKODate.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + " (TST)"
             });
         }
     });
 }
 
 function initEngine() {
-    generate104Matches(); // Populates all 104 matches
+    generatePristine104Matches(); 
     calculateStandings();
     renderGroups();
     renderThirdPlaceTable();
@@ -255,13 +265,16 @@ function renderFixtures() {
         
         root.innerHTML += `
             <div style="background: var(--card-bg); padding: 14px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
-                <div>
+                <div style="flex: 1;">
                     <span style="background: var(--primary); color: #000; padding: 2px 8px; font-size: 0.75rem; font-weight: 700; border-radius:3px;">M${m.id}</span>
                     <small style="color: var(--text-muted); margin-left: 8px; font-weight:600;">${badgeInfo}</small>
                     <div style="font-size: 0.75rem; color: var(--accent); margin-top: 4px; font-weight:500;">📍 ${m.venue}</div>
                 </div>
-                <div style="font-size: 1rem; letter-spacing: 0.3px; font-weight: 500;">
-                    ${m.home} <strong style="color: var(--primary); margin: 0 8px;">${scoreDisplay}</strong> ${m.away}
+                <div style="flex: 1; text-align: center; font-size: 1rem; letter-spacing: 0.3px; font-weight: 500;">
+                    ${m.home} <strong style="color: var(--primary); margin: 0 12px;">${scoreDisplay}</strong> ${m.away}
+                </div>
+                <div style="flex: 1; text-align: right; font-size: 0.8rem; color: var(--primary); font-weight: 600;">
+                    📅 ${m.timeTST}
                 </div>
             </div>`;
     });
@@ -271,15 +284,14 @@ function renderFixtures() {
 // 6. LINEAR TREE BRACKET - AUTOMATED REAL TEAM POPULATION FIX
 // ==========================================================================
 function getTeamOrPlaceholder(groupLetter, rankIndex) {
-    // Gracefully reads calculated results from live table standings
-    if (groupStandings[groupLetter] && groupStandings[groupLetter][rankIndex]) {
+    if (groupStandings[groupLetter] && groupStandings[groupLetter][rankIndex] && groupStandings[groupLetter][rankIndex].pld > 0) {
         return groupStandings[groupLetter][rankIndex].name;
     }
     return `${rankIndex + 1}º Place Group ${groupLetter}`;
 }
 
 function getThirdPlaceQualifiedTeam(rankPosition) {
-    if (thirdPlacedTeams && thirdPlacedTeams[rankPosition]) {
+    if (thirdPlacedTeams && thirdPlacedTeams[rankPosition] && thirdPlacedTeams[rankPosition].pld > 0) {
         return thirdPlacedTeams[rankPosition].name;
     }
     return `Best 3rd Place #${rankPosition + 1}`;
@@ -290,7 +302,6 @@ function renderKnockoutBracket() {
     if (!root) return;
     root.innerHTML = "";
 
-    // Maps structural bracket rows directly to computed table spots
     const bracketStructure = [
         {
             roundName: "Round of 32",
@@ -339,11 +350,11 @@ function renderKnockoutBracket() {
                         <span class="bracket-match-venue">📍 ${m.venue}</span>
                     </div>
                     <div class="bracket-team-row">
-                        <span style="color: ${m.t1.includes('Place') ? 'var(--text-muted)' : '#fff'}">${m.t1}</span>
+                        <span style="color: ${(m.t1.includes('Place') || m.t1.includes('Winner')) ? 'var(--text-muted)' : '#fff'}">${m.t1}</span>
                         <strong>-</strong>
                     </div>
                     <div class="bracket-team-row">
-                        <span style="color: ${m.t2.includes('Place') ? 'var(--text-muted)' : '#fff'}">${m.t2}</span>
+                        <span style="color: ${(m.t2.includes('Place') || m.t2.includes('Winner')) ? 'var(--text-muted)' : '#fff'}">${m.t2}</span>
                         <strong>-</strong>
                     </div>
                 </div>`;
@@ -375,5 +386,5 @@ function renderVenuesTab() {
     });
 }
 
-// Attach listeners to safely initialize UI rendering on window content load
+// Safer event hooks ensuring all background content drops cleanly
 window.onload = initEngine;
