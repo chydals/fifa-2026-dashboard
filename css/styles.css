@@ -268,3 +268,17 @@ td:first-child {
     .match-card { flex-direction: column; text-align: center; }
     .match-teams { padding: 20px 0 0 0; width: 100%; }
 }
+/* Flag Alignment Styles */
+.flag-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flag-icon {
+    width: 24px;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    object-fit: cover;
+}
