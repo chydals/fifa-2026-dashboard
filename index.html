@@ -8,169 +8,288 @@
 </head>
 <body>
 
+    <!-- BRANDING HUB -->
     <header>
-        <div class="brand-container" style="display: flex; align-items: center; justify-content: center; gap: 25px; margin-bottom: 15px; flex-wrap: wrap;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/FIFA_logo_without_slogan.svg" alt="FIFA Official Logo" style="height: 35px; filter: brightness(0) invert(1);">
-            <div style="width: 2px; height: 40px; background-color: rgba(255,255,255,0.2);" class="brand-divider"></div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/2026_FIFA_World_Cup_Logo.svg" alt="FIFA World Cup 2026 Logo" style="height: 75px;">
+        <div class="brand-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/FIFA_logo_without_slogan.svg" alt="FIFA Official Logo" class="brand-fifa">
+            <div class="brand-divider"></div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/2026_FIFA_World_Cup_Logo.svg" alt="FIFA World Cup 2026 Logo" class="brand-wc26">
         </div>
         <h1>FIFA WORLD CUP 2026</h1>
         <p>Official 48-Team Tracker &bull; Taiwan Time (UTC+8)</p>
     </header>
 
+    <!-- TAB ACTIONS SYSTEM -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('groups')">Groups & Tables</button>
-        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures (72 Matches)</button>
+        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures</button>
         <button class="tab-btn" onclick="switchTab('bracket')">Knockout Brackets</button>
     </div>
 
+    <!-- TAB 1: GROUPS ENGINE -->
     <div id="groups" class="tab-content active">
         <div class="groups-grid" id="groups-container"></div>
     </div>
 
+    <!-- TAB 2: MOBILE FIXTURES -->
     <div id="fixtures" class="tab-content">
         <div class="fixtures-container">
-            <div class="filter-bar" style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05);">
-                <label for="stage-filter" style="margin-right: 10px; font-weight: bold; color: var(--primary); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Filter Calendar:</label>
-                <select id="stage-filter" onchange="renderFixtures()" style="background: var(--secondary); color: #fff; border: 1px solid var(--primary); padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; outline: none;">
-                    <option value="all">Show All 72 Group Stage Matches</option>
-                    <option value="A">Group A</option>
-                    <option value="B">Group B</option>
-                    <option value="C">Group C</option>
-                    <option value="D">Group D</option>
-                    <option value="E">Group E</option>
-                    <option value="F">Group F</option>
-                    <option value="G">Group G</option>
-                    <option value="H">Group H</option>
-                    <option value="I">Group I</option>
-                    <option value="J">Group J</option>
-                    <option value="K">Group K</option>
-                    <option value="L">Group L</option>
+            <div class="filter-bar">
+                <label for="stage-filter">Filter Calendar:</label>
+                <select id="stage-filter" onchange="renderFixtures()">
+                    <option value="all">All 72 Group Stage Matches</option>
+                    <option value="A">Group A</option><option value="B">Group B</option>
+                    <option value="C">Group C</option><option value="D">Group D</option>
+                    <option value="E">Group E</option><option value="F">Group F</option>
+                    <option value="G">Group G</option><option value="H">Group H</option>
+                    <option value="I">Group I</option><option value="J">Group J</option>
+                    <option value="K">Group K</option><option value="L">Group L</option>
                 </select>
             </div>
             <div id="match-list"></div>
         </div>
     </div>
 
+    <!-- TAB 3: OFFICIAL FIFA KNOCKOUT CONFIGURATION -->
     <div id="bracket" class="tab-content">
-        <div class="bracket-container">
-            
-            <div class="bracket-round">
-                <h4>Round of 32</h4>
+        <div class="bracket-scroll-wrapper">
+            <div class="bracket-container">
                 
-                <div class="bracket-match">
-                    <div class="match-meta">Match 73 &bull; June 28 &bull; Los Angeles Stadium</div>
-                    <div class="bracket-team"><span>🇲🇽 Mexico (1A)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇿🇦 South Africa (3C)</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 74 &bull; June 29 &bull; Boston Stadium</div>
-                    <div class="bracket-team"><span>🇨🇦 Canada (1B)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇨🇭 Switzerland (2F)</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 75 &bull; June 29 &bull; Estadio Monterrey</div>
-                    <div class="bracket-team"><span>🇧🇷 Brazil (1C)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland (2F)</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 76 &bull; June 30 &bull; New York New Jersey</div>
-                    <div class="bracket-team"><span>🇺🇸 United States (1D)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇵🇾 Paraguay (2G)</span><span>-</span></div>
+                <!-- COLUMN 1: LEFT ROUND OF 32 -->
+                <div class="bracket-round">
+                    <h4>Round of 32 (Left)</h4>
+                    
+                    <div class="bracket-match" id="card-m74">
+                        <div class="match-meta"><span>M74</span> &bull; 06/30 04:30</div>
+                        <div class="bracket-team"><span>1E</span><span>-</span></div>
+                        <div class="bracket-team"><span>3ABCDF</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m77">
+                        <div class="match-meta"><span>M77</span> &bull; 07/01 05:00</div>
+                        <div class="bracket-team"><span>1I</span><span>-</span></div>
+                        <div class="bracket-team"><span>3CDFGH</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m73">
+                        <div class="match-meta"><span>M73</span> &bull; 06/29 03:00</div>
+                        <div class="bracket-team"><span>2A</span><span>-</span></div>
+                        <div class="bracket-team"><span>2B</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m75">
+                        <div class="match-meta"><span>M75</span> &bull; 06/30 09:00</div>
+                        <div class="bracket-team"><span>1F</span><span>-</span></div>
+                        <div class="bracket-team"><span>2C</span><span>-</span></div>
+                    </div>
+
+                    <div class="bracket-match" id="card-m83">
+                        <div class="match-meta"><span>M83</span> &bull; 07/03 07:00</div>
+                        <div class="bracket-team"><span>2K</span><span>-</span></div>
+                        <div class="bracket-team"><span>2L</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m84">
+                        <div class="match-meta"><span>M84</span> &bull; 07/03 03:00</div>
+                        <div class="bracket-team"><span>1H</span><span>-</span></div>
+                        <div class="bracket-team"><span>2J</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m81">
+                        <div class="match-meta"><span>M81</span> &bull; 07/02 08:00</div>
+                        <div class="bracket-team"><span>1D</span><span>-</span></div>
+                        <div class="bracket-team"><span>3BEFIJ</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m82">
+                        <div class="match-meta"><span>M82</span> &bull; 07/02 04:00</div>
+                        <div class="bracket-team"><span>1G</span><span>-</span></div>
+                        <div class="bracket-team"><span>3AEHIJ</span><span>-</span></div>
+                    </div>
                 </div>
 
-                <div class="bracket-match">
-                    <div class="match-meta">Match 77 &bull; June 30 &bull; Dallas Stadium</div>
-                    <div class="bracket-team"><span>🇩🇪 Germany (1E)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇪🇨 Ecuador (3L)</span><span>-</span></div>
+                <!-- COLUMN 2: LEFT QUARTER-FINALS -->
+                <div class="bracket-round">
+                    <h4>Round of 16 (Left)</h4>
+                    
+                    <div class="bracket-match" id="card-m89">
+                        <div class="match-meta"><span>M89</span> &bull; 07/05 05:00</div>
+                        <div class="bracket-team"><span>W74</span><span>-</span></div>
+                        <div class="bracket-team"><span>W77</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m90">
+                        <div class="match-meta"><span>M90</span> &bull; 07/05 01:00</div>
+                        <div class="bracket-team"><span>W73</span><span>-</span></div>
+                        <div class="bracket-team"><span>W75</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m93">
+                        <div class="match-meta"><span>M93</span> &bull; 07/07 03:00</div>
+                        <div class="bracket-team"><span>W83</span><span>-</span></div>
+                        <div class="bracket-team"><span>W84</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m94">
+                        <div class="match-meta"><span>M94</span> &bull; 07/07 08:00</div>
+                        <div class="bracket-team"><span>W81</span><span>-</span></div>
+                        <div class="bracket-team"><span>W82</span><span>-</span></div>
+                    </div>
                 </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 78 &bull; July 1 &bull; Atlanta Stadium</div>
-                    <div class="bracket-team"><span>🇳🇱 Netherlands (1F)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇯🇵 Japan (2C)</span><span>-</span></div>
+
+                <!-- COLUMN 3: LEFT SEMI-FINALS -->
+                <div class="bracket-round">
+                    <h4>Quarter-Finals (Left)</h4>
+                    
+                    <div class="bracket-match" id="card-m97">
+                        <div class="match-meta"><span>M97</span> &bull; 07/10 04:00</div>
+                        <div class="bracket-team"><span>W89</span><span>-</span></div>
+                        <div class="bracket-team"><span>W90</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m98">
+                        <div class="match-meta"><span>M98</span> &bull; 07/11 03:00</div>
+                        <div class="bracket-team"><span>W93</span><span>-</span></div>
+                        <div class="bracket-team"><span>W94</span><span>-</span></div>
+                    </div>
                 </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 79 &bull; July 1 &bull; San Francisco Stadium</div>
-                    <div class="bracket-team"><span>🇧🇪 Belgium (1G)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇮🇷 Iran (3H)</span><span>-</span></div>
+
+                <!-- COLUMN 4: FINALS PLATFORM (CENTER HUB) -->
+                <div class="bracket-round center-hub">
+                    
+                    <div class="center-segment">
+                        <h4>Semi-Finals</h4>
+                        <div class="bracket-match" id="card-m101">
+                            <div class="match-meta"><span>M101</span> &bull; 07/15 03:00</div>
+                            <div class="bracket-team"><span>W97</span><span>-</span></div>
+                            <div class="bracket-team"><span>W98</span><span>-</span></div>
+                        </div>
+                        <div class="bracket-match" id="card-m102">
+                            <div class="match-meta"><span>M102</span> &bull; 07/16 03:00</div>
+                            <div class="bracket-team"><span>W99</span><span>-</span></div>
+                            <div class="bracket-team"><span>W100</span><span>-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="center-segment championship">
+                        <h4>World Cup Final</h4>
+                        <div class="bracket-match final-highlight" id="card-m104">
+                            <div class="match-meta"><span>M104</span> &bull; 07/20 03:00</div>
+                            <div class="bracket-team"><span>W101</span><span>-</span></div>
+                            <div class="bracket-team"><span>W102</span><span>-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="center-segment third-place">
+                        <h4>Play-off for 3rd Place</h4>
+                        <div class="bracket-match" id="card-m103">
+                            <div class="match-meta"><span>M103</span> &bull; 07/19 05:00</div>
+                            <div class="bracket-team"><span>RU101</span><span>-</span></div>
+                            <div class="bracket-team"><span>RU102</span><span>-</span></div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 80 &bull; July 2 &bull; Estadio Azteca (CDMX)</div>
-                    <div class="bracket-team"><span>🇪🇸 Spain (1H)</span><span>-</span></div>
-                    <div class="bracket-team"><span>🇺🇾 Uruguay (2J)</span><span>-</span></div>
+
+                <!-- COLUMN 5: RIGHT SEMI-FINALS -->
+                <div class="bracket-round">
+                    <h4>Quarter-Finals (Right)</h4>
+                    
+                    <div class="bracket-match" id="card-m99">
+                        <div class="match-meta"><span>M99</span> &bull; 07/12 05:00</div>
+                        <div class="bracket-team"><span>W91</span><span>-</span></div>
+                        <div class="bracket-team"><span>W92</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m100">
+                        <div class="match-meta"><span>M100</span> &bull; 07/12 09:00</div>
+                        <div class="bracket-team"><span>W95</span><span>-</span></div>
+                        <div class="bracket-team"><span>W96</span><span>-</span></div>
+                    </div>
                 </div>
+
+                <!-- COLUMN 6: RIGHT QUARTER-FINALS -->
+                <div class="bracket-round">
+                    <h4>Round of 16 (Right)</h4>
+                    
+                    <div class="bracket-match" id="card-m91">
+                        <div class="match-meta"><span>M91</span> &bull; 07/06 04:00</div>
+                        <div class="bracket-team"><span>W76</span><span>-</span></div>
+                        <div class="bracket-team"><span>W78</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m92">
+                        <div class="match-meta"><span>M92</span> &bull; 07/06 08:00</div>
+                        <div class="bracket-team"><span>W79</span><span>-</span></div>
+                        <div class="bracket-team"><span>W80</span><span>-</span></div>
+                    </div>
+
+                    <div class="bracket-match" id="card-m95">
+                        <div class="match-meta"><span>M95</span> &bull; 07/08 00:00</div>
+                        <div class="bracket-team"><span>W86</span><span>-</span></div>
+                        <div class="bracket-team"><span>W88</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m96">
+                        <div class="match-meta"><span>M96</span> &bull; 07/08 04:00</div>
+                        <div class="bracket-team"><span>W85</span><span>-</span></div>
+                        <div class="bracket-team"><span>W87</span><span>-</span></div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 7: RIGHT ROUND OF 32 -->
+                <div class="bracket-round">
+                    <h4>Round of 32 (Right)</h4>
+                    
+                    <div class="bracket-match" id="card-m76">
+                        <div class="match-meta"><span>M76</span> &bull; 06/30 01:00</div>
+                        <div class="bracket-team"><span>1C</span><span>-</span></div>
+                        <div class="bracket-team"><span>2F</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m78">
+                        <div class="match-meta"><span>M78</span> &bull; 07/01 01:00</div>
+                        <div class="bracket-team"><span>2E</span><span>-</span></div>
+                        <div class="bracket-team"><span>2I</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m79">
+                        <div class="match-meta"><span>M79</span> &bull; 07/01 09:00</div>
+                        <div class="bracket-team"><span>1A</span><span>-</span></div>
+                        <div class="bracket-team"><span>3CEFHI</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m80">
+                        <div class="match-meta"><span>M80</span> &bull; 07/02 00:00</div>
+                        <div class="bracket-team"><span>1L</span><span>-</span></div>
+                        <div class="bracket-team"><span>3EHIJK</span><span>-</span></div>
+                    </div>
+
+                    <div class="bracket-match" id="card-m86">
+                        <div class="match-meta"><span>M86</span> &bull; 07/04 06:00</div>
+                        <div class="bracket-team"><span>1J</span><span>-</span></div>
+                        <div class="bracket-team"><span>2H</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m88">
+                        <div class="match-meta"><span>M88</span> &bull; 07/04 02:00</div>
+                        <div class="bracket-team"><span>2D</span><span>-</span></div>
+                        <div class="bracket-team"><span>2G</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m85">
+                        <div class="match-meta"><span>M85</span> &bull; 07/03 11:00</div>
+                        <div class="bracket-team"><span>1B</span><span>-</span></div>
+                        <div class="bracket-team"><span>3EFGIJ</span><span>-</span></div>
+                    </div>
+                    
+                    <div class="bracket-match" id="card-m87">
+                        <div class="match-meta"><span>M87</span> &bull; 07/04 09:30</div>
+                        <div class="bracket-team"><span>1K</span><span>-</span></div>
+                        <div class="bracket-team"><span>3DEIJL</span><span>-</span></div>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="bracket-round">
-                <h4>Round of 16</h4>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 89 &bull; July 4 &bull; Philadelphia Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 73</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 75</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 90 &bull; July 5 &bull; Houston Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 74</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 77</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 91 &bull; July 5 &bull; New York New Jersey</div>
-                    <div class="bracket-team"><span>Winner Match 76</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 78</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 92 &bull; July 6 &bull; Dallas Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 79</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 80</span><span>-</span></div>
-                </div>
-            </div>
-
-            <div class="bracket-round">
-                <h4>Quarter-finals</h4>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 97 &bull; July 9 &bull; Boston Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 89</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 90</span><span>-</span></div>
-                </div>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 98 &bull; July 10 &bull; Los Angeles Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 91</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 92</span><span>-</span></div>
-                </div>
-            </div>
-
-            <div class="bracket-round">
-                <h4>Semi-finals</h4>
-                
-                <div class="bracket-match">
-                    <div class="match-meta">Match 101 &bull; July 14 &bull; Dallas Stadium</div>
-                    <div class="bracket-team"><span>Winner Match 97</span><span>-</span></div>
-                    <div class="bracket-team"><span>Winner Match 98</span><span>-</span></div>
-                </div>
-            </div>
-
-            <div class="bracket-round">
-                <h4>Final</h4>
-                
-                <div class="bracket-match" style="border: 2px solid var(--primary); box-shadow: 0 0 25px rgba(0,207,117,0.35); background: linear-gradient(180deg, var(--card-bg) 0%, #17223b 100%);">
-                    <div class="match-meta" style="color: var(--primary); font-weight: bold; border-color: rgba(0,207,117,0.2);">Match 104 &bull; July 19 &bull; New York New Jersey</div>
-                    <div class="bracket-team" style="border-left-color: var(--primary);"><span>Semifinalist A</span><span>-</span></div>
-                    <div class="bracket-team" style="border-left-color: var(--primary);"><span>Semifinalist B</span><span>-</span></div>
-                </div>
-            </div>
-
         </div>
     </div>
 
