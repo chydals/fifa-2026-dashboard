@@ -3,239 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIFA World Cup 2026™ Knockout Stage Calendar</title>
-    <style>
-        :root {
-            --fifa-blue: #001f4d;
-            --fifa-gold: #c6a15b;
-            --fifa-light-bg: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-dark: #111827;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --radius: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--fifa-light-bg);
-            color: var(--text-dark);
-            line-height: 1.5;
-            padding: 16px;
-        }
-
-        /* Clean Header Architecture */
-        header {
-            text-align: center;
-            margin-bottom: 24px;
-            padding: 24px 16px;
-            background: linear-gradient(135deg, var(--fifa-blue) 0%, #002d6e; 100%);
-            color: white;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-container {
-            width: 120px;
-            height: auto;
-            margin: 0 auto 12px auto;
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            text-transform: uppercase;
-        }
-
-        header p {
-            color: #93c5fd;
-            font-size: 0.875rem;
-            margin-top: 4px;
-        }
-
-        /* Mobile Anchor Jump-Bar */
-        .mobile-nav {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-        .mobile-nav::-webkit-scrollbar {
-            display: none;
-        }
-        .mobile-nav a {
-            background-color: var(--card-bg);
-            color: var(--text-dark);
-            padding: 8px 14px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.813rem;
-            font-weight: 600;
-            white-space: nowrap;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        /* Structural Framework */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        .phase-section {
-            margin-bottom: 32px;
-            scroll-margin-top: 16px;
-        }
-
-        .phase-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--fifa-blue);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 4px solid var(--fifa-gold);
-            padding-left: 8px;
-        }
-
-        /* Responsive Side-by-Side Split Blueprint */
-        .bracket-split {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .bracket-side {
-            flex: 1;
-        }
-
-        .side-heading {
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        /* Card Mechanics */
-        .match-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 14px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .match-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .match-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 6px;
-        }
-
-        .match-id {
-            background-color: #eff6ff;
-            color: #1e40af;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .match-vs {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .team-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: 600;
-            font-size: 0.938rem;
-        }
-
-        .team-row span.next-step {
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: var(--fifa-gold);
-        }
-
-        /* Specialty Highlights for Finals */
-        .final-grid {
-            grid-template-columns: 1fr;
-        }
-        .grand-final-card {
-            border: 2px solid var(--fifa-gold);
-            background: linear-gradient(to bottom right, #ffffff, #fffdf9);
-        }
-        .grand-final-card .match-id {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        /* Media Queries for Tablet and Desktop Devices */
-        @media (min-width: 640px) {
-            .grid-layout {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            header h1 {
-                font-size: 1.875rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            body {
-                padding: 24px;
-            }
-            .mobile-nav {
-                display: none; /* Hide jump navigation on spacious viewports */
-            }
-            .bracket-split {
-                flex-direction: row;
-            }
-            .grid-layout {
-                grid-template-columns: 1fr; /* Stack vertically within its assigned side lane */
-            }
-            .final-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+    <title>FIFA World Cup 2026™ Hub</title>
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
 
-<div class="container">
     <header>
-        <!-- Razor-sharp inline High-Definition SVG Logo -->
-        <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100%" height="100%">
+        <div class="brand-container">
+            <svg class="fifa-wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+                <path d="M45 25h65v18H66v18h36v18H66v26H45V25zm80 0h21v80h-21V25zm40 0h60v18h-39v15h32v18h-32v29h-21V25zm115 0h21l25 80h-22l-5-18h-22l-5 18h-22l25-80zm4 44l-7-25-7 25h14z" fill="#ffffff"/>
+            </svg>
+            <div class="brand-divider"></div>
+            <svg class="fifa-logo-2026" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130">
                 <path d="M40,5 C40,2 43,0 50,0 C57,0 60,2 60,5 L60,85 C60,88 57,90 50,90 C43,90 40,88 40,85 Z" fill="#ffffff"/>
                 <circle cx="50" cy="112" r="14" fill="#c6a15b"/>
                 <path d="M42,106 L53,106 L45,118 L56,118" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -243,311 +22,131 @@
                 <path d="M15,65 Q50,70 85,65" stroke="#c6a15b" stroke-width="2" fill="none"/>
             </svg>
         </div>
-        <h1>FIFA World Cup 2026™</h1>
-        <p>Knockout Phase Master Calendar</p>
+        <h1>FIFA WORLD CUP 2026</h1>
+        <p>Official 48-Team Tracker &bull; Taiwan Time (UTC+8)</p>
     </header>
 
-    <!-- Mobile Navigation Shortcuts -->
-    <nav class="mobile-nav">
-        <a href="#r16">Round of 16</a>
-        <a href="#qf">Quarter-Finals</a>
-        <a href="#sf">Semi-Finals</a>
-        <a href="#finals">Finals</a>
-    </nav>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('groups')">Groups & Standings</button>
+        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures Calendar (72 Matches)</button>
+        <button class="tab-btn" onclick="switchTab('bracket')">Knockout Brackets</button>
+    </div>
 
-    <!-- ROUND OF 16 SECTION -->
-    <section class="phase-section" id="r16">
-        <div class="phase-title">🔲 Round of 16</div>
-        <div class="bracket-split">
-            <!-- Left Side Bracket -->
-            <div class="bracket-side">
-                <div class="side-heading">Left Side Draw</div>
-                <div class="grid-layout">
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M74</span><span>📅 06/30 — 🕒 04:30</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1E</span><span class="next-step">➡️ W74</span></div>
-                            <div class="team-row"><span>3ABCDF</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M77</span><span>📅 07/01 — 🕒 05:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1I</span><span class="next-step">➡️ W77</span></div>
-                            <div class="team-row"><span>3CDFGH</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M73</span><span>📅 06/29 — 🕒 03:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>2A</span><span class="next-step">➡️ W73</span></div>
-                            <div class="team-row"><span>2B</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M75</span><span>📅 06/30 — 🕒 09:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1F</span><span class="next-step">➡️ W75</span></div>
-                            <div class="team-row"><span>2C</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M83</span><span>📅 07/03 — 🕒 07:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>2K</span><span class="next-step">➡️ W83</span></div>
-                            <div class="team-row"><span>2L</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M84</span><span>📅 07/03 — 🕒 03:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1H</span><span class="next-step">➡️ W84</span></div>
-                            <div class="team-row"><span>2J</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M81</span><span>📅 07/02 — 🕒 08:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1D</span><span class="next-step">➡️ W81</span></div>
-                            <div class="team-row"><span>3BEFIJ</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M82</span><span>📅 07/02 — 🕒 04:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1G</span><span class="next-step">➡️ W82</span></div>
-                            <div class="team-row"><span>3AEHIJ</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div id="groups" class="tab-content active">
+        <div class="groups-grid" id="groups-container"></div>
+    </div>
 
-            <!-- Right Side Bracket -->
-            <div class="bracket-side">
-                <div class="side-heading">Right Side Draw</div>
-                <div class="grid-layout">
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M76</span><span>📅 06/30 — 🕒 01:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1C</span><span class="next-step">➡️ W76</span></div>
-                            <div class="team-row"><span>2F</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M78</span><span>📅 07/01 — 🕒 01:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>2E</span><span class="next-step">➡️ W78</span></div>
-                            <div class="team-row"><span>2I</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M79</span><span>📅 07/01 — 🕒 09:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1A</span><span class="next-step">➡️ W79</span></div>
-                            <div class="team-row"><span>3CEFHI</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M80</span><span>📅 07/02 — 🕒 00:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1L</span><span class="next-step">➡️ W80</span></div>
-                            <div class="team-row"><span>3EHIJK</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M86</span><span>📅 07/04 — 🕒 06:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1J</span><span class="next-step">➡️ W86</span></div>
-                            <div class="team-row"><span>2H</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M88</span><span>📅 07/04 — 🕒 02:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>2D</span><span class="next-step">➡️ W88</span></div>
-                            <div class="team-row"><span>2G</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M85</span><span>📅 07/03 — 🕒 11:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1B</span><span class="next-step">➡️ W85</span></div>
-                            <div class="team-row"><span>3EFGIJ</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M87</span><span>📅 07/04 — 🕒 09:30</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>1K</span><span class="next-step">➡️ W87</span></div>
-                            <div class="team-row"><span>3DEIJL</span></div>
-                        </div>
-                    </div>
-                </div>
+    <div id="fixtures" class="tab-content">
+        <div class="fixtures-container">
+            <div class="filter-bar">
+                <label for="stage-filter">Filter Group Calendar:</label>
+                <select id="stage-filter" onchange="renderFixtures()">
+                    <option value="all">Show All 72 Group Stage Matches</option>
+                    <option value="A">Group A</option>
+                    <option value="B">Group B</option>
+                    <option value="C">Group C</option>
+                    <option value="D">Group D</option>
+                    <option value="E">Group E</option>
+                    <option value="F">Group F</option>
+                    <option value="G">Group G</option>
+                    <option value="H">Group H</option>
+                    <option value="I">Group I</option>
+                    <option value="J">Group J</option>
+                    <option value="K">Group K</option>
+                    <option value="L">Group L</option>
+                </select>
             </div>
+            <div id="match-list"></div>
         </div>
-    </section>
+    </div>
 
-    <!-- QUARTER-FINALS SECTION -->
-    <section class="phase-section" id="qf">
-        <div class="phase-title">📊 Quarter-Finals</div>
-        <div class="bracket-split">
-            <!-- Left Side -->
-            <div class="bracket-side">
-                <div class="side-heading">Left Side Draw</div>
-                <div class="grid-layout">
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M89</span><span>📅 07/05 — 🕒 05:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W74</span><span class="next-step">➡️ W89</span></div>
-                            <div class="team-row"><span>W77</span></div>
-                        </div>
+    <div id="bracket" class="tab-content">
+        <nav class="mobile-bracket-nav">
+            <a href="#r16-anchor">Round of 16</a>
+            <a href="#qf-anchor">Quarter-finals</a>
+            <a href="#sf-anchor">Semi-finals</a>
+            <a href="#finals-anchor">Finals</a>
+        </nav>
+
+        <div class="bracket-container">
+            
+            <div class="bracket-round" id="r16-anchor">
+                <h4>Round of 16</h4>
+                <div class="bracket-split-wrapper">
+                    <div class="bracket-side-lane">
+                        <div class="lane-title">Left Side Bracket</div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M74</span> 06/30 04:30</div><div class="bracket-team"><span>1E</span></div><div class="bracket-team"><span>3ABCDF</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M77</span> 07/01 05:00</div><div class="bracket-team"><span>1I</span></div><div class="bracket-team"><span>3CDFGH</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M73</span> 06/29 03:00</div><div class="bracket-team"><span>2A</span></div><div class="bracket-team"><span>2B</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M75</span> 06/30 09:00</div><div class="bracket-team"><span>1F</span></div><div class="bracket-team"><span>2C</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M83</span> 07/03 07:00</div><div class="bracket-team"><span>2K</span></div><div class="bracket-team"><span>2L</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M84</span> 07/03 03:00</div><div class="bracket-team"><span>1H</span></div><div class="bracket-team"><span>2J</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M81</span> 07/02 08:00</div><div class="bracket-team"><span>1D</span></div><div class="bracket-team"><span>3BEFIJ</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M82</span> 07/02 04:00</div><div class="bracket-team"><span>1G</span></div><div class="bracket-team"><span>3AEHIJ</span></div></div>
                     </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M90</span><span>📅 07/05 — 🕒 01:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W73</span><span class="next-step">➡️ W90</span></div>
-                            <div class="team-row"><span>W75</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M93</span><span>📅 07/07 — 🕒 03:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W83</span><span class="next-step">➡️ W93</span></div>
-                            <div class="team-row"><span>W84</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M94</span><span>📅 07/07 — 🕒 08:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W81</span><span class="next-step">➡️ W94</span></div>
-                            <div class="team-row"><span>W82</span></div>
-                        </div>
+                    <div class="bracket-side-lane">
+                        <div class="lane-title">Right Side Bracket</div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M76</span> 06/30 01:00</div><div class="bracket-team"><span>1C</span></div><div class="bracket-team"><span>2F</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M78</span> 07/01 01:00</div><div class="bracket-team"><span>2E</span></div><div class="bracket-team"><span>2I</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M79</span> 07/01 09:00</div><div class="bracket-team"><span>1A</span></div><div class="bracket-team"><span>3CEFHI</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M80</span> 07/02 00:00</div><div class="bracket-team"><span>1L</span></div><div class="bracket-team"><span>3EHIJK</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M86</span> 07/04 06:00</div><div class="bracket-team"><span>1J</span></div><div class="bracket-team"><span>2H</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M88</span> 07/04 02:00</div><div class="bracket-team"><span>2D</span></div><div class="bracket-team"><span>2G</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M85</span> 07/03 11:00</div><div class="bracket-team"><span>1B</span></div><div class="bracket-team"><span>3EFGIJ</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M87</span> 07/04 09:30</div><div class="bracket-team"><span>1K</span></div><div class="bracket-team"><span>3DEIJL</span></div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Side -->
-            <div class="bracket-side">
-                <div class="side-heading">Right Side Draw</div>
-                <div class="grid-layout">
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M91</span><span>📅 07/06 — 🕒 04:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W76</span><span class="next-step">➡️ W91</span></div>
-                            <div class="team-row"><span>W78</span></div>
-                        </div>
+            <div class="bracket-round" id="qf-anchor">
+                <h4>Quarter-finals</h4>
+                <div class="bracket-split-wrapper">
+                    <div class="bracket-side-lane">
+                        <div class="lane-title">Left Side Bracket</div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M89</span> 07/05 05:00</div><div class="bracket-team"><span>Winner Match 74</span></div><div class="bracket-team"><span>Winner Match 77</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M90</span> 07/05 01:00</div><div class="bracket-team"><span>Winner Match 73</span></div><div class="bracket-team"><span>Winner Match 75</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M93</span> 07/07 03:00</div><div class="bracket-team"><span>Winner Match 83</span></div><div class="bracket-team"><span>Winner Match 84</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M94</span> 07/07 08:00</div><div class="bracket-team"><span>Winner Match 81</span></div><div class="bracket-team"><span>Winner Match 82</span></div></div>
                     </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M92</span><span>📅 07/06 — 🕒 08:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W79</span><span class="next-step">➡️ W92</span></div>
-                            <div class="team-row"><span>W80</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M95</span><span>📅 07/08 — 🕒 00:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W86</span><span class="next-step">➡️ W95</span></div>
-                            <div class="team-row"><span>W88</span></div>
-                        </div>
-                    </div>
-                    <div class="match-card">
-                        <div class="match-meta"><span class="match-id">M96</span><span>📅 07/08 — 🕒 04:00</span></div>
-                        <div class="match-vs">
-                            <div class="team-row"><span>W85</span><span class="next-step">➡️ W96</span></div>
-                            <div class="team-row"><span>W87</span></div>
-                        </div>
+                    <div class="bracket-side-lane">
+                        <div class="lane-title">Right Side Bracket</div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M91</span> 07/06 04:00</div><div class="bracket-team"><span>Winner Match 76</span></div><div class="bracket-team"><span>Winner Match 78</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M92</span> 07/06 08:00</div><div class="bracket-team"><span>Winner Match 79</span></div><div class="bracket-team"><span>Winner Match 80</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M95</span> 07/08 00:00</div><div class="bracket-team"><span>Winner Match 86</span></div><div class="bracket-team"><span>Winner Match 88</span></div></div>
+                        <div class="bracket-match"><div class="match-meta"><span class="m-id">M96</span> 07/08 04:00</div><div class="bracket-team"><span>Winner Match 85</span></div><div class="bracket-team"><span>Winner Match 87</span></div></div>
                     </div>
                 </div>
             </div>
+
+            <div class="bracket-round" id="sf-anchor">
+                <h4>Semi-finals</h4>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M97</span> 07/10 04:00</div><div class="bracket-team"><span>Winner Match 89</span></div><div class="bracket-team"><span>Winner Match 90</span></div></div>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M98</span> 07/11 03:00</div><div class="bracket-team"><span>Winner Match 93</span></div><div class="bracket-team"><span>Winner Match 94</span></div></div>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M99</span> 07/12 05:00</div><div class="bracket-team"><span>Winner Match 91</span></div><div class="bracket-team"><span>Winner Match 92</span></div></div>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M100</span> 07/12 09:00</div><div class="bracket-team"><span>Winner Match 95</span></div><div class="bracket-team"><span>Winner Match 96</span></div></div>
+            </div>
+
+            <div class="bracket-round" id="finals-anchor">
+                <h4>Finals & Play-off</h4>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M101</span> 07/15 03:00</div><div class="bracket-team"><span>Winner Match 97</span></div><div class="bracket-team"><span>Winner Match 98</span></div></div>
+                <div class="bracket-match"><div class="match-meta"><span class="m-id">M102</span> 07/16 03:00</div><div class="bracket-team"><span>Winner Match 99</span></div><div class="bracket-team"><span>Winner Match 100</span></div></div>
+                
+                <div class="bracket-match third-place-card">
+                    <div class="match-meta"><span class="m-id" style="background:#4b5563;">M103</span> Play-off for 3rd Place &bull; 07/19 05:00</div>
+                    <div class="bracket-team"><span>Runner-up M101</span></div>
+                    <div class="bracket-team"><span>Runner-up M102</span></div>
+                </div>
+
+                <div class="bracket-match grand-final-card">
+                    <div class="match-meta"><span class="m-id" style="background:#fcc419; color:#090a0f;">M104</span> WORLD CUP FINAL &bull; 07/20 03:00</div>
+                    <div class="bracket-team"><span>Winner Match 101</span></div>
+                    <div class="bracket-team"><span>Winner Match 102</span></div>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
 
-    <!-- SEMI-FINALS SECTION -->
-    <section class="phase-section" id="sf">
-        <div class="phase-title">⚡ Semi-Finals</div>
-        <div class="grid-layout">
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M97</span><span>📅 07/10 — 🕒 04:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W89</span><span class="next-step">➡️ W97</span></div>
-                    <div class="team-row"><span>W90</span></div>
-                </div>
-            </div>
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M98</span><span>📅 07/11 — 🕒 03:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W93</span><span class="next-step">➡️ W98</span></div>
-                    <div class="team-row"><span>W94</span></div>
-                </div>
-            </div>
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M99</span><span>📅 07/12 — 🕒 05:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W91</span><span class="next-step">➡️ W99</span></div>
-                    <div class="team-row"><span>W92</span></div>
-                </div>
-            </div>
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M100</span><span>📅 07/12 — 🕒 09:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W95</span><span class="next-step">➡️ W100</span></div>
-                    <div class="team-row"><span>W96</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FINALS PATHWAYS SECTION -->
-    <section class="phase-section" id="finals">
-        <div class="phase-title">🏆 Finals & Play-off</div>
-        <div class="grid-layout final-grid">
-            <!-- Final Four Semis Links -->
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M101</span><span>📅 07/15 — 🕒 03:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W97</span><span class="next-step">👑 Final / 🥉 3rd</span></div>
-                    <div class="team-row"><span>W98</span></div>
-                </div>
-            </div>
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M102</span><span>📅 07/16 — 🕒 03:00</span></div>
-                <div class="match-vs">
-                    <div class="team-row"><span>W99</span><span class="next-step">👑 Final / 🥉 3rd</span></div>
-                    <div class="team-row"><span>W100</span></div>
-                </div>
-            </div>
-            <!-- Third Place Play-off -->
-            <div class="match-card">
-                <div class="match-meta"><span class="match-id">M103</span><span>🥉 3rd Place Play-off</span></div>
-                <div class="match-vs">
-                    <div class="team-row" style="color: var(--text-muted);"><span>📅 07/19 — 🕒 05:00</span></div>
-                    <div class="team-row"><span>RU101 vs RU102</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Grand Final Spotlight Row -->
-        <div class="grid-layout" style="margin-top: 16px;">
-            <div class="match-card grand-final-card">
-                <div class="match-meta">
-                    <span class="match-id">M104</span>
-                    <span style="color: var(--fifa-gold); font-weight: 800;">👑 WORLD CUP GRAND FINAL</span>
-                </div>
-                <div class="match-vs">
-                    <div class="team-row" style="font-size: 1.1rem; padding: 4px 0;">
-                        <span>Winner Match 101</span>
-                        <span style="font-weight: 400; color: var(--text-muted);">📅 07/20</span>
-                    </div>
-                    <div class="team-row" style="font-size: 1.1rem; padding: 4px 0;">
-                        <span>Winner Match 102</span>
-                        <span style="font-weight: 800; color: var(--fifa-blue);">🕒 03:00</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
+    <script src="./js/app.js"></script>
 </body>
 </html>
