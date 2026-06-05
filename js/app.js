@@ -1,7 +1,7 @@
 /**
  * app.js - Unified FIFA World Cup 2026 Core Dashboard Engine
  * Implements Group Phase calculations, Dynamic Third-Place Rankings,
- * Host Venue Data Modules, and Label-mapped Brackets.
+ * Host Venue Data Modules, and Auto-populating Bracket Tree.
  */
 
 // ==========================================================================
@@ -42,21 +42,76 @@ const worldCupVenues = [
     { name: "NRG Stadium", city: "Houston, Texas, USA", capacity: "72,220", img: "https://upload.wikimedia.org/wikipedia/commons/2/22/NRG_Stadium_Houston.jpg" }
 ];
 
-// Initial Group Match Data Mockup Engine
-let worldCupMatches = [
-    { id: 1, stage: "Group Stage", group: "A", home: "Mexico", away: "South Africa", homeScore: 2, awayScore: 1, venue: "Estadio Azteca" },
-    { id: 2, stage: "Group Stage", group: "A", home: "South Korea", away: "Czech Republic", homeScore: 1, awayScore: 1, venue: "Estadio Akron" },
-    { id: 3, stage: "Group Stage", group: "B", home: "Canada", away: "Bosnia and Herzegovina", homeScore: 0, awayScore: 0, venue: "BMO Field" },
-    { id: 4, stage: "Group Stage", group: "D", home: "United States", away: "Paraguay", homeScore: 3, awayScore: 2, venue: "SoFi Stadium" }
-];
-
-// Runtime Calculated Storage Objects
+// Array to store all 104 matches computed at runtime
+let worldCupMatches = [];
 let groupStandings = {};
+let thirdPlacedTeams = [];
 
 // ==========================================================================
-// 2. RUNTIME ENGINE INITIALIZATION
+// 2. RUNTIME ENGINE INITIALIZATION & MATCH GENERATOR
 // ==========================================================================
+function generate104Matches() {
+    worldCupMatches = [];
+    let matchId = 1;
+
+    // Generate Round-Robin Group Matches (6 games per group x 12 groups = 72 Group Games)
+    worldCup2026Groups.forEach(g => {
+        const t = g.teams;
+        const combinations = [
+            { h: t[0], a: t[1] }, { h: t[2], a: t[3] },
+            { h: t[0], a: t[2] }, { h: t[1], a: t[3] },
+            { h: t[3], a: t[0] }, { h: t[1], a: t[2] }
+        ];
+
+        combinations.forEach(c => {
+            // Pick a randomized sample score for entertainment simulation
+            let homeSimScore = Math.floor(Math.random() * 4);
+            let awaySimScore = Math.floor(Math.random() * 3);
+            let venueObj = worldCupVenues[matchId % worldCupVenues.length];
+
+            worldCupMatches.push({
+                id: matchId++,
+                stage: "Group Stage",
+                group: g.group,
+                home: c.h,
+                away: c.a,
+                homeScore: homeSimScore,
+                awayScore: awaySimScore,
+                venue: venueObj.name
+            });
+        });
+    });
+
+    // Knockout Matches (32 matches total: 16 in R32, 8 in R16, 4 in QF, 2 in SF, 1 Third Place, 1 Final)
+    // 72 + 32 = 104 Total Tournament Matches
+    const knockoutPhases = [
+        { name: "Round of 32", count: 16 },
+        { name: "Round of 16", count: 8 },
+        { name: "Quarter-finals", count: 4 },
+        { name: "Semi-finals", count: 2 },
+        { name: "Third Place Playoff", count: 1 },
+        { name: "Final", count: 1 }
+    ];
+
+    knockoutPhases.forEach(phase => {
+        for (let i = 0; i < phase.count; i++) {
+            let venueObj = worldCupVenues[matchId % worldCupVenues.length];
+            worldCupMatches.push({
+                id: matchId++,
+                stage: phase.name,
+                group: "KO",
+                home: `Winner M${matchId - 17}`, // Dynamically links progression tags
+                away: `Winner M${matchId - 16}`,
+                homeScore: null,
+                awayScore: null,
+                venue: venueObj.name
+            });
+        }
+    });
+}
+
 function initEngine() {
+    generate104Matches(); // Populates all 104 matches
     calculateStandings();
     renderGroups();
     renderThirdPlaceTable();
@@ -77,14 +132,12 @@ function switchTab(tabId) {
 // 3. GROUP STANDINGS PROCESSING LOGIC
 // ==========================================================================
 function calculateStandings() {
-    // Reset structural state map
     worldCup2026Groups.forEach(g => {
         groupStandings[g.group] = g.teams.map(t => ({
             name: t, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
         }));
     });
 
-    // Run scores matrix computation loop
     worldCupMatches.forEach(m => {
         if (m.stage === "Group Stage" && m.homeScore !== null && m.awayScore !== null) {
             const arr = groupStandings[m.group];
@@ -104,7 +157,6 @@ function calculateStandings() {
         }
     });
 
-    // Execute standard sorting per group: Points -> GD -> GF
     for (let g in groupStandings) {
         groupStandings[g].sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf);
     }
@@ -152,18 +204,17 @@ function renderThirdPlaceTable() {
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    let thirdPlacedTeams = [];
+    thirdPlacedTeams = [];
     for (let g in groupStandings) {
         if (groupStandings[g][2]) {
             thirdPlacedTeams.push({ group: g, ...groupStandings[g][2] });
         }
     }
 
-    // Official FIFA World Cup Tiebreaker Evaluation: Points -> Goal Difference -> Goals Scored
     thirdPlacedTeams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 
     thirdPlacedTeams.forEach((t, i) => {
-        const isAdvancing = i < 8; // Top 8 third-place spots out of 12 advance
+        const isAdvancing = i < 8;
         const rowClass = isAdvancing ? "cutoff-advance" : "cutoff-out";
         tbody.innerHTML += `
             <tr class="${rowClass}">
@@ -194,48 +245,67 @@ function renderFixtures() {
     const filteredMatches = worldCupMatches.filter(m => filter === "all" || m.stage === filter);
 
     if (filteredMatches.length === 0) {
-        root.innerHTML = `<div style="text-align:center; padding: 20px; color:#9ca3af;">No scheduled match instances computed for this phase filter view.</div>`;
+        root.innerHTML = `<div style="text-align:center; padding: 20px; color:#9ca3af;">No scheduled matches found for this phase.</div>`;
         return;
     }
 
     filteredMatches.forEach(m => {
+        let scoreDisplay = (m.homeScore !== null) ? `${m.homeScore} : ${m.awayScore}` : "vs";
+        let badgeInfo = m.stage === "Group Stage" ? `Pool ${m.group}` : `${m.stage}`;
+        
         root.innerHTML += `
-            <div style="background: var(--card-bg); padding: 14px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05)">
+            <div style="background: var(--card-bg); padding: 14px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
                 <div>
                     <span style="background: var(--primary); color: #000; padding: 2px 8px; font-size: 0.75rem; font-weight: 700; border-radius:3px;">M${m.id}</span>
-                    <small style="color: var(--text-muted); margin-left: 8px; font-weight:600;">${m.stage} &bull; Pool ${m.group}</small>
+                    <small style="color: var(--text-muted); margin-left: 8px; font-weight:600;">${badgeInfo}</small>
                     <div style="font-size: 0.75rem; color: var(--accent); margin-top: 4px; font-weight:500;">📍 ${m.venue}</div>
                 </div>
-                <div style="font-size: 1rem; letter-spacing: 0.3px;">
-                    ${m.home} <strong style="color: var(--primary); margin: 0 4px;">${m.homeScore}</strong> : <strong style="color: var(--primary); margin: 0 4px;">${m.awayScore}</strong> ${m.away}
+                <div style="font-size: 1rem; letter-spacing: 0.3px; font-weight: 500;">
+                    ${m.home} <strong style="color: var(--primary); margin: 0 8px;">${scoreDisplay}</strong> ${m.away}
                 </div>
             </div>`;
     });
 }
 
 // ==========================================================================
-// 6. LINEAR TREE STRUCTURAL INTERFACE GENERATOR (Knockout Stages)
+// 6. LINEAR TREE BRACKET - AUTOMATED REAL TEAM POPULATION FIX
 // ==========================================================================
+function getTeamOrPlaceholder(groupLetter, rankIndex) {
+    // Gracefully reads calculated results from live table standings
+    if (groupStandings[groupLetter] && groupStandings[groupLetter][rankIndex]) {
+        return groupStandings[groupLetter][rankIndex].name;
+    }
+    return `${rankIndex + 1}º Place Group ${groupLetter}`;
+}
+
+function getThirdPlaceQualifiedTeam(rankPosition) {
+    if (thirdPlacedTeams && thirdPlacedTeams[rankPosition]) {
+        return thirdPlacedTeams[rankPosition].name;
+    }
+    return `Best 3rd Place #${rankPosition + 1}`;
+}
+
 function renderKnockoutBracket() {
     const root = document.getElementById("bracket-render-root");
     if (!root) return;
     root.innerHTML = "";
 
+    // Maps structural bracket rows directly to computed table spots
     const bracketStructure = [
         {
             roundName: "Round of 32",
             matches: [
-                { matchId: "M73", t1: "Runner-up Group A", t2: "Runner-up Group B", venue: "SoFi Stadium" },
-                { matchId: "M74", t1: "Winner Group C", t2: "3rd Place Grp A/B/C/D/F", venue: "MetLife Stadium" },
-                { matchId: "M75", t1: "Winner Group E", t2: "3rd Place Grp A/B/C/D/F", venue: "Mercedes-Benz Stadium" },
-                { matchId: "M76", t1: "Winner Group F", t2: "Runner-up Group C", venue: "BC Place" }
+                { matchId: "M73", t1: getTeamOrPlaceholder("A", 0), t2: getTeamOrPlaceholder("C", 1), venue: "SoFi Stadium" },
+                { matchId: "M74", t1: getTeamOrPlaceholder("B", 0), t2: getThirdPlaceQualifiedTeam(0), venue: "MetLife Stadium" },
+                { matchId: "M75", t1: getTeamOrPlaceholder("E", 0), t2: getTeamOrPlaceholder("F", 1), venue: "Mercedes-Benz Stadium" },
+                { matchId: "M76", t1: getTeamOrPlaceholder("D", 0), t2: getThirdPlaceQualifiedTeam(1), venue: "BC Place" }
             ]
         },
         {
             roundName: "Round of 16",
             matches: [
-                { matchId: "M89", t1: "Winner Match 73", t2: "Winner Match 75", venue: "Estadio Azteca" },
-                { matchId: "M90", t1: "Winner Match 74", t2: "Winner Match 77", venue: "AT&T Stadium" }
+                { matchId: "M89", t1: "Winner Match 73", t2: "Winner Match 74", venue: "Estadio Azteca" },
+                { matchId: "M90", t1: "Winner Match 75", t2: "Winner Match 76", venue: "AT&T Stadium" }
             ]
         },
         {
@@ -247,13 +317,13 @@ function renderKnockoutBracket() {
         {
             roundName: "Semi-finals",
             matches: [
-                { matchId: "M101", t1: "Winner Match 97", t2: "Winner Match 98", venue: "Hard Rock Stadium" }
+                { matchId: "M101", t1: "Winner Match 97", t2: "Qualified Challenger", venue: "Hard Rock Stadium" }
             ]
         },
         {
             roundName: "Final",
             matches: [
-                { matchId: "M104", t1: "Semifinalist 1", t2: "Semifinalist 2", venue: "MetLife Stadium" }
+                { matchId: "M104", t1: "🏆 World Cup Finalist 1", t2: "🏆 World Cup Finalist 2", venue: "MetLife Stadium" }
             ]
         }
     ];
@@ -269,11 +339,11 @@ function renderKnockoutBracket() {
                         <span class="bracket-match-venue">📍 ${m.venue}</span>
                     </div>
                     <div class="bracket-team-row">
-                        <span>${m.t1}</span>
+                        <span style="color: ${m.t1.includes('Place') ? 'var(--text-muted)' : '#fff'}">${m.t1}</span>
                         <strong>-</strong>
                     </div>
                     <div class="bracket-team-row">
-                        <span>${m.t2}</span>
+                        <span style="color: ${m.t2.includes('Place') ? 'var(--text-muted)' : '#fff'}">${m.t2}</span>
                         <strong>-</strong>
                     </div>
                 </div>`;
