@@ -1,81 +1,62 @@
-==========================================================================
-🏆 FIFA World Cup 2026 Dashboard Tracker (Taiwan Time - UTC+8)
-==========================================================================
 
-An interactive, responsive, client-side dashboard engineered to track the expanded 48-team 2026 FIFA World Cup across Canada, Mexico, and the United States. All match schedules and venues are fully integrated, with calculations localized automatically into Taiwan Standard Time (TST / UTC+8).
-
-This release includes the complete structural redesign featuring a white-canvas high-contrast branding system, official mascot rows, dynamic third-place standings processing, a 16-stadium host database, and an optimized linear tree-structured knockout layout.
-
-
-==========================================================================
-🌟 Key Engine Features
+🏆 My Personal FIFA World Cup 2026 Tracker 
 ==========================================================================
 
-1. Official 48-Team Group Phase Matrix:
-   - Complete data-structural array tracking all 12 groups (Groups A through L) and all 4 qualified participating nations per group.
+This is a fun, personal entertainment project made to follow and keep track of the upcoming 48-team FIFA World Cup 2026. 
 
-2. Dynamic Standings & Score Processing:
-   - Interactive score rendering instantly calculates group points, wins, losses, draws, and goal differentials to update table ranks in real time.
-
-3. Live Third-Placed Teams Ranking Engine:
-   - Automatically pools together all 3rd place finishers across the 12 groups.
-   - Evaluates them live utilizing official FIFA tiebreaker logic: 
-     Highest Points ──> Superior Goal Difference ──> Most Goals Scored.
-   - Visually renders clear, color-coded qualification lines separating the top 8 advancing teams from the 4 eliminated teams.
-
-4. Host Venues & Stadiums Database Module:
-   - Displays a dedicated grid architecture showcasing all 16 official host venues.
-   - Captures stadium names, locations (City/Country), high-quality photographic assets, and exact spectator seating capacities.
-
-5. Re-Engineered Easy-to-Read Knockout Bracket UX:
-   - Replaced overlapping flex configurations with structured, sequential single-elimination columns.
-   - Cleared up spatial clutter to provide an easy-to-read tournament tree progression.
-   - Maps and renders the official stadium venue label directly onto each individual match card node.
-
-6. Official Brand Reintegration:
-   - Embeds the official high-contrast 2026 FIFA World Cup emblem over a clean, protective white backing to ensure pixel-perfect readability against dark themes.
-   - Showcases the official tri-nation tournament mascots: Maple™ (Canada), Zayu™ (Mexico), and Clutch™ (USA).
-   - Features dedicated footer placement branding for official FIFA World Cup Partners.
+It calculates group tables automatically, tracks the best 3rd-placed teams, shows host stadiums, and maps out the knockout tree brackets—all adjusted to my local Taiwan Time (UTC+8).
 
 
+
+⚠️ JUST FOR FUN (NON-COMMERCIAL USE)
 ==========================================================================
-📂 Project Directory Structure
+- This is a 100% non-commercial personal project created purely for hobby, learning, and entertainment use.
+- It is NOT an official app and is not linked to FIFA, the host countries (Canada, Mexico, USA), or any official sponsors. 
+- All team names, logos, and mascots belong to their official owners and are used here just for visual fun!
+
+
+
+✨ Cool Stuff This App Does
 ==========================================================================
+
+1. Automatic Group Standings:
+   - Tracks all 12 groups (A to L). When you type in match scores, it updates points, wins, and goal differences instantly.
+
+2. Best Third-Placed Teams Calculator:
+   - Automatically ranks all the 3rd-placed teams using World Cup tiebreakers (Points -> Goal Difference -> Goals Scored) and displays a green line showing who makes the cut!
+
+3. Host Stadiums Showroom:
+   - A dedicated tab showing photos, cities, and seating capacities for all 16 official host stadiums.
+
+4. Easy-to-Read Knockout Bracket:
+   - A clean, horizontal tree layout tracking matches from the Round of 32 all the way to the Final, with the stadium name written right on each match card.
+
+5. Correct 2026 Branding & Mascots:
+   - Includes the real high-contrast World Cup logo on a white backing so it pops on the dark background, along with the three official mascots: Maple™, Zayu™, and Clutch™.
+
+
+
+📁 Project Files
+==========================================================================
+
+Everything runs directly in your browser. The project structure is super simple:
 
 fifa-2026-dashboard/
 │
-├── index.html         # Main dashboard markup layout, navigation controls, and tab segments
-├── README.txt         # System specifications and engineering configuration documentation
-│
+├── index.html         # The layout and tabs structure
+├── README.txt         # This file right here!
 ├── css/
-│   └── styles.css     # "Cyber-Sports" UI layer, high-contrast branding, and tree-bracket nodes
-│
+│   └── styles.css     # The look, dark theme colors, and bracket layout
 └── js/
-    └── app.js         # Core database arrays, tiebreaker algorithms, and rendering engines
+    └── app.js         # The logic that calculates scores and handles tabs
 
 
-==========================================================================
-🚀 Technical Implementations & Code Stack
-==========================================================================
 
-- HTML5: Semantic UI elements and responsive viewport controls (`meta-viewport`).
-- CSS3: Custom properties / styling variables (`--primary`, `--card-bg`), CSS Grid layouts for multi-pool tracking, and translation animations for tab-switching views.
-- JavaScript (ES6+): Client-side reactive states. Contains native array sorting method handlers (`.sort()`) running chained tiebreaker conditioning checks for instant standings calculations without external library dependencies.
-
-
-==========================================================================
-🔧 Installation & Local Execution
+🚀 How to Run It
 ==========================================================================
 
-Because the dashboard runs completely on standard client-side architecture, no complex runtime dependencies, compilers, or Node packages are required:
+You don't need to install anything, configure servers, or download extra stuff! 
 
-1. Clone or download the project folder structure onto your local machine.
-2. Ensure the file architecture is maintained (`css/styles.css` and `js/app.js` are in their respective subfolders).
-3. Double-click or open `index.html` in any modern web browser (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari).
-4. Navigate through the tabs to test live calculation capabilities.
-
-
-==========================================================================
-📝 License & Specifications
-==========================================================================
-Designed for personal management use and professional sports dashboard portfolio showcases. All team names, marks, official logos, and mascot trademarks are owned by FIFA or their respective football associations.
+1. Just make sure all files are saved in the folder structure shown above.
+2. Double-click `index.html` to open it in your favorite web browser (Chrome, Edge, Safari, Firefox).
+3. Start entering scores and have fun tracking the tournament!
