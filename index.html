@@ -3,119 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIFA World Cup 2026 - Dashboard</title>
-    <!-- Link to your modular stylesheet -->
+    <title>FIFA World Cup 2026 Hub</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
     <header>
         <h1>FIFA World Cup 2026</h1>
-        <p>Live Interactive Hub &bull; Taiwan Time (UTC+8)</p>
+        <p>Official 48-Team Tracker &bull; Taiwan Time (UTC+8)</p>
     </header>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('groups')">Groups & Tables</button>
-        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures & Live Results</button>
+        <button class="tab-btn" onclick="switchTab('fixtures')">Fixtures (72 Matches)</button>
         <button class="tab-btn" onclick="switchTab('bracket')">Knockout Brackets</button>
     </div>
 
-    <!-- TAB 1: GROUPS & TABLES -->
     <div id="groups" class="tab-content active">
-        <div class="groups-grid" id="groups-container">
-            <!-- Dynamic Injection from app.js will populate tables for Groups A through L here -->
-        </div>
+        <div class="groups-grid" id="groups-container"></div>
     </div>
 
-    <!-- TAB 2: FIXTURES & LIVE RESULTS -->
     <div id="fixtures" class="tab-content">
         <div class="fixtures-container">
             <div class="filter-bar">
                 <select id="stage-filter" onchange="renderFixtures()">
-                    <option value="all">All Match Stages</option>
-                    <option value="Group Stage">Group Stage</option>
-                    <option value="Round of 32">Round of 32</option>
-                    <option value="Round of 16">Round of 16</option>
-                    <option value="Quarter-finals">Quarter-finals</option>
-                    <option value="Semi-finals">Semi-finals</option>
-                    <option value="Final">Final</option>
+                    <option value="all">Show All 72 Group Stage Matches</option>
                 </select>
             </div>
-            <div id="match-list">
-                <!-- Match cards with automatic Taiwan Time conversion will generate here -->
-            </div>
+            <div id="match-list"></div>
         </div>
     </div>
 
-    <!-- TAB 3: KNOCKOUT BRACKETS -->
     <div id="bracket" class="tab-content">
         <div class="bracket-container">
             
-            <!-- Round of 32 Column -->
             <div class="bracket-round">
                 <h4>Round of 32</h4>
-                <div class="bracket-match">
-                    <div class="bracket-team winner"><span>Group A Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>Group C 3rd Place</span> <span>-</span></div>
-                </div>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>Group B Runner-up</span> <span>-</span></div>
-                    <div class="bracket-team"><span>Group F Runner-up</span> <span>-</span></div>
-                </div>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>Group E Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>Group L 3rd Place</span> <span>-</span></div>
-                </div>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>Group D Runner-up</span> <span>-</span></div>
-                    <div class="bracket-team"><span>Group G Winner</span> <span>-</span></div>
-                </div>
+                <div class="bracket-match"><div>🇲🇽 MX (1A)</div><div>🇿🇦 ZA (3C)</div></div>
+                <div class="bracket-match"><div>🇨🇦 CA (1B)</div><div>🇨🇭 CH (2F)</div></div>
+                <div class="bracket-match"><div>🇧🇷 BR (1C)</div><div>🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO (2F)</div></div>
+                <div class="bracket-match"><div>🇺🇸 US (1D)</div><div>🇵🇾 PY (2G)</div></div>
+                <div class="bracket-match"><div>🇩🇪 DE (1E)</div><div>🇪🇨 EC (3L)</div></div>
+                <div class="bracket-match"><div>🇳🇱 NL (1F)</div><div>🇯🇵 JP (2C)</div></div>
+                <div class="bracket-match"><div>🇧🇪 BE (1G)</div><div>🇮🇷 IR (3H)</div></div>
+                <div class="bracket-match"><div>🇪🇸 ES (1H)</div><div>🇺🇾 UY (2J)</div></div>
+                <div class="bracket-match"><div>🇫🇷 FR (1I)</div><div>🇳🇴 NO (3F)</div></div>
+                <div class="bracket-match"><div>🇦提 AR (1J)</div><div>🇦🇹 AT (2H)</div></div>
+                <div class="bracket-match"><div>🇵🇹 PT (1K)</div><div>🇨🇴 CO (2L)</div></div>
+                <div class="bracket-match"><div>  🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG (1L)</div><div>🇭🇷 HR (2G)</div></div>
+                <div class="bracket-match"><div>🇿🇦 RSA (2A)</div><div>🇰🇷 KOR (2B)</div></div>
+                <div class="bracket-match"><div>🇲🇦 MAR (2C)</div><div>🇹🇷 TUR (2D)</div></div>
+                <div class="bracket-match"><div>🇨🇮 CIV (2E)</div><div>🇸🇪 SWE (3A)</div></div>
+                <div class="bracket-match"><div>🇸🇦 KSA (3E)</div><div>🇬🇭 GHA (3K)</div></div>
             </div>
 
-            <!-- Round of 16 Column -->
             <div class="bracket-round">
                 <h4>Round of 16</h4>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>R32 Match 1 Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>R32 Match 2 Winner</span> <span>-</span></div>
-                </div>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>R32 Match 3 Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>R32 Match 4 Winner</span> <span>-</span></div>
-                </div>
+                <div class="bracket-match"><div>Winner Match 73</div><div>Winner Match 74</div></div>
+                <div class="bracket-match"><div>Winner Match 75</div><div>Winner Match 76</div></div>
+                <div class="bracket-match"><div>Winner Match 77</div><div>Winner Match 78</div></div>
+                <div class="bracket-match"><div>Winner Match 79</div><div>Winner Match 80</div></div>
+                <div class="bracket-match"><div>Winner Match 81</div><div>Winner Match 82</div></div>
+                <div class="bracket-match"><div>Winner Match 83</div><div>Winner Match 84</div></div>
+                <div class="bracket-match"><div>Winner Match 85</div><div>Winner Match 86</div></div>
+                <div class="bracket-match"><div>Winner Match 87</div><div>Winner Match 88</div></div>
             </div>
 
-            <!-- Quarter-finals Column -->
             <div class="bracket-round">
                 <h4>Quarter-finals</h4>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>R16 Match 1 Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>R16 Match 2 Winner</span> <span>-</span></div>
-                </div>
+                <div class="bracket-match"><div>QF Squad 1</div><div>QF Squad 2</div></div>
+                <div class="bracket-match"><div>QF Squad 3</div><div>QF Squad 4</div></div>
+                <div class="bracket-match"><div>QF Squad 5</div><div>QF Squad 6</div></div>
+                <div class="bracket-match"><div>QF Squad 7</div><div>QF Squad 8</div></div>
             </div>
 
-            <!-- Semi-finals Column -->
             <div class="bracket-round">
                 <h4>Semi-finals</h4>
-                <div class="bracket-match">
-                    <div class="bracket-team"><span>QF Match 1 Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>QF Match 2 Winner</span> <span>-</span></div>
-                </div>
+                <div class="bracket-match"><div>Semifinalist 1</div><div>Semifinalist 2</div></div>
+                <div class="bracket-match"><div>Semifinalist 3</div><div>Semifinalist 4</div></div>
             </div>
 
-            <!-- World Cup Final Column -->
             <div class="bracket-round">
-                <h4>World Cup Final</h4>
+                <h4>Final</h4>
                 <div class="bracket-match" style="border: 2px solid var(--primary);">
-                    <div class="bracket-team"><span>SF Match 1 Winner</span> <span>-</span></div>
-                    <div class="bracket-team"><span>SF Match 2 Winner</span> <span>-</span></div>
+                    <div>Grand Finalist A</div>
+                    <div>Grand Finalist B</div>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Link to your modular JavaScript engine -->
     <script src="js/app.js"></script>
 </body>
 </html>
