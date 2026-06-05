@@ -1,9 +1,8 @@
 /**
- * app.js - FIFA World Cup 2026 Core Dashboard Engine
- * Optimized match rendering loops, group stages, and filter systems.
+ * app.js - FIFA World Cup 2026 Dashboard Core Engine
+ * Generates all 72 interactive fixtures and maps team arrays down dynamically.
  */
 
-// 1. Official 48-Team Groups & ISO Codes for Flag Generation
 const worldCup2026Groups = [
   { group: "A", teams: [{name: "Mexico", code: "mx"}, {name: "South Africa", code: "za"}, {name: "South Korea", code: "kr"}, {name: "Czech Republic", code: "cz"}] },
   { group: "B", teams: [{name: "Canada", code: "ca"}, {name: "Bosnia and Herzegovina", code: "ba"}, {name: "Qatar", code: "qa"}, {name: "Switzerland", code: "ch"}] },
@@ -19,7 +18,6 @@ const worldCup2026Groups = [
   { group: "L", teams: [{name: "England", code: "gb-eng"}, {name: "Croatia", code: "hr"}, {name: "Ghana", code: "gh"}, {name: "Panama", code: "pa"}] }
 ];
 
-// Rebuild local live score calculations
 let standingsData = {};
 worldCup2026Groups.forEach(g => {
     standingsData[g.group] = g.teams.map(t => ({
@@ -27,31 +25,27 @@ worldCup2026Groups.forEach(g => {
     }));
 });
 
-// Generate all 72 group stage match configurations dynamically
 const matches = [];
 let matchIdCounter = 1;
 
-worldCup2026Groups.forEach(g => {
+// Generating full tournament matchups (Matches 1 to 72)
+worldCup2026Groups.forEach((g, gIdx) => {
     const t = g.teams;
-    const roundRobinPairings = [
-        {h: t[0], a: t[1], dayOffset: 0}, {h: t[2], a: t[3], dayOffset: 0},
-        {h: t[0], a: t[2], dayOffset: 4}, {h: t[1], a: t[3], dayOffset: 4},
-        {h: t[3], a: t[0], dayOffset: 8}, {h: t[1], a: t[2], dayOffset: 8}
+    const pairings = [
+        {h: t[0], a: t[1], day: 11}, {h: t[2], a: t[3], day: 12},
+        {h: t[0], a: t[2], day: 16}, {h: t[1], a: t[3], day: 17},
+        {h: t[3], a: t[0], day: 21}, {h: t[1], a: t[2], day: 22}
     ];
-    roundRobinPairings.forEach((pair, index) => {
-        let hourOffset = 15 + (index * 3);
-        let dateString = `2026-06-${11 + pair.dayOffset}T${hourOffset % 24}:00:00Z`;
+    pairings.forEach((p, pIdx) => {
+        let hour = 15 + ((pIdx + gIdx) % 3) * 3;
         matches.push({
             id: matchIdCounter++,
             stage: 'Group Stage',
             group: g.group,
-            home: pair.h.name,
-            homeCode: pair.h.code,
-            away: pair.a.name,
-            awayCode: pair.a.code,
-            utcTime: dateString,
-            homeScore: '',
-            awayScore: ''
+            home: p.h.name, homeCode: p.h.code,
+            away: p.a.name, awayCode: p.a.code,
+            utcTime: `2026-06-${p.day}T${hour}:00:00Z`,
+            homeScore: '', awayScore: ''
         });
     });
 });
@@ -60,9 +54,7 @@ window.switchTab = function(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
-    if (window.event && window.event.currentTarget) {
-        window.event.currentTarget.classList.add('active');
-    }
+    if (event && event.currentTarget) event.currentTarget.classList.add('active');
 };
 
 function formatToTaiwanTime(utcString) {
@@ -80,19 +72,14 @@ function renderGroups() {
     
     for (const [groupLetter, teams] of Object.entries(standingsData)) {
         teams.sort((a, b) => b.pts - a.pts || b.gd - a.gd);
-
         let tableHtml = `
             <div class="group-card">
                 <h3>Group ${groupLetter}</h3>
                 <table>
                     <thead>
-                        <tr>
-                            <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>
-                        </tr>
+                        <tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>
                     </thead>
-                    <tbody>
-        `;
-
+                    <tbody>`;
         teams.forEach(team => {
             tableHtml += `
                 <tr>
@@ -102,8 +89,7 @@ function renderGroups() {
                     </td>
                     <td>${team.p}</td><td>${team.w}</td><td>${team.d}</td><td>${team.l}</td><td>${team.gd}</td>
                     <td><strong>${team.pts}</strong></td>
-                </tr>
-            `;
+                </tr>`;
         });
         tableHtml += `</tbody></table></div>`;
         container.innerHTML += tableHtml;
@@ -135,8 +121,7 @@ window.renderFixtures = function() {
                     <span class="flag-cell"><img class="flag-icon" src="https://flagcdn.com/w40/${match.awayCode}.png" alt=""> ${match.away}</span>
                     <input type="number" class="score-input" value="${match.awayScore}" data-match-id="${match.id}" data-team="away" onchange="updateScore(this)">
                 </div>
-            </div>
-        `;
+            </div>`;
         listContainer.appendChild(card);
     });
 };
@@ -173,9 +158,13 @@ function recalculateGroupStandings() {
                 homeTeam.p++; awayTeam.p++;
                 homeTeam.gd += (hSc - aSc); awayTeam.gd += (aSc - hSc);
 
-                if (hSc > aSc) { homeTeam.w++; homeTeam.pts += 3; awayTeam.l++; }
-                else if (aSc > hSc) { awayTeam.w++; awayTeam.pts += 3; homeTeam.l++; }
-                else { homeTeam.d++; homeTeam.pts += 1; awayTeam.d++; awayTeam.pts += 1; }
+                if (hSc > aSc) {
+                    homeTeam.w++; homeTeam.pts += 3; awayTeam.l++;
+                } else if (aSc > hSc) {
+                    awayTeam.w++; awayTeam.pts += 3; homeTeam.l++;
+                } else {
+                    homeTeam.d++; homeTeam.pts += 1; awayTeam.d++; awayTeam.pts += 1;
+                }
             }
         }
     });
@@ -183,6 +172,6 @@ function recalculateGroupStandings() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderGroups();
+    recalculateGroupStandings();
     renderFixtures();
 });
