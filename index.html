@@ -26,9 +26,21 @@
     <div id="fixtures" class="tab-content">
         <div class="fixtures-container">
             <div class="filter-bar">
+                <label for="stage-filter" style="margin-right: 10px; font-weight: bold; color: var(--accent);">Filter by Group:</label>
                 <select id="stage-filter" onchange="renderFixtures()">
                     <option value="all">Show All 72 Group Stage Matches</option>
-                    <option value="Group Stage">Group Stage Only</option>
+                    <option value="A">Group A</option>
+                    <option value="B">Group B</option>
+                    <option value="C">Group C</option>
+                    <option value="D">Group D</option>
+                    <option value="E">Group E</option>
+                    <option value="F">Group F</option>
+                    <option value="G">Group G</option>
+                    <option value="H">Group H</option>
+                    <option value="I">Group I</option>
+                    <option value="J">Group J</option>
+                    <option value="K">Group K</option>
+                    <option value="L">Group L</option>
                 </select>
             </div>
             <div id="match-list"></div>
@@ -40,55 +52,85 @@
             
             <div class="bracket-round">
                 <h4>Round of 32</h4>
-                <div class="bracket-match"><div>🇲🇽 MX (1A)</div><div>🇿🇦 ZA (3C)</div></div>
-                <div class="bracket-match"><div>🇨🇦 CA (1B)</div><div>🇨🇭 CH (2F)</div></div>
-                <div class="bracket-match"><div>🇧🇷 BR (1C)</div><div>🏴%A3󠁢󠁳󠁣󠁴󠁿 SCO (2F)</div></div>
-                <div class="bracket-match"><div>🇺🇸 US (1D)</div><div>🇵🇾 PY (2G)</div></div>
-                <div class="bracket-match"><div>🇩🇪 DE (1E)</div><div>🇪🇨 EC (3L)</div></div>
-                <div class="bracket-match"><div>🇳🇱 NL (1F)</div><div>🇯🇵 JP (2C)</div></div>
-                <div class="bracket-match"><div>🇧🇪 BE (1G)</div><div>🇮🇷 IR (3H)</div></div>
-                <div class="bracket-match"><div>🇪🇸 ES (1H)</div><div>🇺🇾 UY (2J)</div></div>
-                <div class="bracket-match"><div>🇫🇷 FR (1I)</div><div>🇳🇴 NO (3F)</div></div>
-                <div class="bracket-match"><div>🇦🇷 AR (1J)</div><div>🇦🇹 AT (2H)</div></div>
-                <div class="bracket-match"><div>🇵🇹 PT (1K)</div><div>🇨🇴 CO (2L)</div></div>
-                <div class="bracket-match"><div>🏴%A3󠁢󠁥󠁮󠁧󠁿 ENG (1L)</div><div>🇭🇷 HR (2G)</div></div>
-                <div class="bracket-match"><div>🇿🇦 RSA (2A)</div><div>🇰🇷 KOR (2B)</div></div>
-                <div class="bracket-match"><div>🇲🇦 MAR (2C)</div><div>🇹🇷 TUR (2D)</div></div>
-                <div class="bracket-match"><div>🇨🇮 CIV (2E)</div><div>🇸🇪 SWE (3A)</div></div>
-                <div class="bracket-match"><div>🇸🇦 KSA (3E)</div><div>🇬🇭 GHA (3K)</div></div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇲🇽 MX (1A)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇿🇦 ZA (3C)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇨🇦 CA (1B)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇨🇭 CH (2F)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇧🇷 BR (1C)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO (2F)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇺🇸 US (1D)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇵🇾 PY (2G)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇩🇪 DE (1E)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇪🇨 EC (3L)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇳🇱 NL (1F)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇯🇵 JP (2C)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇧🇪 BE (1G)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇮🇷 IR (3H)</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>🇪🇸 ES (1H)</span><span>-</span></div>
+                    <div class="bracket-team"><span>🇺🇾 UY (2J)</span><span>-</span></div>
+                </div>
             </div>
 
             <div class="bracket-round">
                 <h4>Round of 16</h4>
-                <div class="bracket-match"><div>Winner Match 73</div><div>Winner Match 74</div></div>
-                <div class="bracket-match"><div>Winner Match 75</div><div>Winner Match 76</div></div>
-                <div class="bracket-match"><div>Winner Match 77</div><div>Winner Match 78</div></div>
-                <div class="bracket-match"><div>Winner Match 79</div><div>Winner Match 80</div></div>
-                <div class="bracket-match"><div>Winner Match 81</div><div>Winner Match 82</div></div>
-                <div class="bracket-match"><div>Winner Match 83</div><div>Winner Match 84</div></div>
-                <div class="bracket-match"><div>Winner Match 85</div><div>Winner Match 86</div></div>
-                <div class="bracket-match"><div>Winner Match 87</div><div>Winner Match 88</div></div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>Winner R32 #1</span><span>-</span></div>
+                    <div class="bracket-team"><span>Winner R32 #2</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>Winner R32 #3</span><span>-</span></div>
+                    <div class="bracket-team"><span>Winner R32 #4</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>Winner R32 #5</span><span>-</span></div>
+                    <div class="bracket-team"><span>Winner R32 #6</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>Winner R32 #7</span><span>-</span></div>
+                    <div class="bracket-team"><span>Winner R32 #8</span><span>-</span></div>
+                </div>
             </div>
 
             <div class="bracket-round">
                 <h4>Quarter-finals</h4>
-                <div class="bracket-match"><div>QF Squad 1</div><div>QF Squad 2</div></div>
-                <div class="bracket-match"><div>QF Squad 3</div><div>QF Squad 4</div></div>
-                <div class="bracket-match"><div>QF Squad 5</div><div>QF Squad 6</div></div>
-                <div class="bracket-match"><div>QF Squad 7</div><div>QF Squad 8</div></div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>QF Squad 1</span><span>-</span></div>
+                    <div class="bracket-team"><span>QF Squad 2</span><span>-</span></div>
+                </div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>QF Squad 3</span><span>-</span></div>
+                    <div class="bracket-team"><span>QF Squad 4</span><span>-</span></div>
+                </div>
             </div>
 
             <div class="bracket-round">
                 <h4>Semi-finals</h4>
-                <div class="bracket-match"><div>Semifinalist 1</div><div>Semifinalist 2</div></div>
-                <div class="bracket-match"><div>Semifinalist 3</div><div>Semifinalist 4</div></div>
+                <div class="bracket-match">
+                    <div class="bracket-team"><span>Semifinalist 1</span><span>-</span></div>
+                    <div class="bracket-team"><span>Semifinalist 2</span><span>-</span></div>
+                </div>
             </div>
 
             <div class="bracket-round">
                 <h4>Final</h4>
-                <div class="bracket-match" style="border: 2px solid var(--primary);">
-                    <div>Grand Finalist A</div>
-                    <div>Grand Finalist B</div>
+                <div class="bracket-match" style="border: 2px solid var(--primary); box-shadow: 0 0 15px rgba(0,207,117,0.4);">
+                    <div class="bracket-team"><span>Grand Finalist A</span><span>-</span></div>
+                    <div class="bracket-team"><span>Grand Finalist B</span><span>-</span></div>
                 </div>
             </div>
 
