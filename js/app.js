@@ -38,7 +38,7 @@ const worldCupVenues = [
     { name: "Levi's Stadium", city: "Santa Clara, California, USA", capacity: "68,500", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Levi%27s_Stadium_in_February_2016_prior_to_Super_Bowl_50_%2824398261729%29.jpg/250px-Levi%27s_Stadium_in_February_2016_prior_to_Super_Bowl_50_%2824398261729%29.jpg" },
     { name: "Gillette Stadium", city: "Foxborough, Massachusetts, USA", capacity: "65,878", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Gillette_Stadium_%28Top_View%29.jpg/250px-Gillette_Stadium_%28Top_View%29.jpg" },
     { name: "Arrowhead Stadium", city: "Kansas City, Missouri, USA", capacity: "76,416", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Aerial_view_of_Arrowhead_Stadium_08-31-2013.jpg/250px-Aerial_view_of_Arrowhead_Stadium_08-31-2013.jpg" },
-    { name: "NRG Stadium", city: "Houston, Texas, USA", capacity: "72,220", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpg/250px-NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpgg" }
+    { name: "NRG Stadium", city: "Houston, Texas, USA", capacity: "72,220", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpg/250px-NRG_stadium_prepared_for_Super_Bowl_Li_%2832513086661%29.jpg" }
 ];
 
 // Structural runtime arrays
@@ -52,9 +52,6 @@ let thirdPlacedTeams = [];
 function generatePristine104Matches() {
     worldCupMatches = [];
     let matchId = 1;
-
-    // Calendar blocks starting on June 12, 2026 (Taiwan Time kickoff)
-    // Matches spread naturally across standard slots: 03:00, 06:00, 09:00 TST
     let baseGroupDate = new Date("2026-06-12T03:00:00+08:00"); 
 
     worldCup2026Groups.forEach((g, gIdx) => {
@@ -67,8 +64,6 @@ function generatePristine104Matches() {
 
         pairings.forEach((p, pIdx) => {
             let venueObj = worldCupVenues[matchId % worldCupVenues.length];
-            
-            // Increment dates progressively so matches advance logically across the June calendar
             let matchDate = new Date(baseGroupDate.getTime());
             matchDate.setDate(baseGroupDate.getDate() + Math.floor(matchId / 6) + (pIdx * 2));
             matchDate.setHours(pIdx % 3 === 0 ? 3 : pIdx % 3 === 1 ? 6 : 9);
@@ -79,15 +74,15 @@ function generatePristine104Matches() {
                 group: g.group,
                 home: p.h,
                 away: p.a,
-                homeScore: null, // Pristine state: no scores loaded yet
+                homeScore: null, 
                 awayScore: null,
                 venue: venueObj.name,
+                country: venueObj.country,
                 timeTST: matchDate.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + " (TST)"
             });
         });
     });
 
-    // Generate Single Elimination Knockouts with sequential late June / July dates
     const knockoutPhases = [
         { name: "Round of 32", count: 16, startDate: "2026-06-29T03:00:00+08:00" },
         { name: "Round of 16", count: 8,  startDate: "2026-07-05T03:00:00+08:00" },
@@ -108,12 +103,13 @@ function generatePristine104Matches() {
             worldCupMatches.push({
                 id: matchId++,
                 stage: phase.name,
-                group: "KO",
+                group: "Knockout Stage",
                 home: `Winner M${matchId - 17}`, 
                 away: `Winner M${matchId - 16}`,
                 homeScore: null,
                 awayScore: null,
                 venue: venueObj.name,
+                country: venueObj.country,
                 timeTST: currentKODate.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + " (TST)"
             });
         }
@@ -125,9 +121,17 @@ function initEngine() {
     calculateStandings();
     renderGroups();
     renderThirdPlaceTable();
+    setupFilterListeners();
     renderFixtures();
     renderKnockoutBracket();
     renderVenuesTab();
+}
+
+function setupFilterListeners() {
+    const filterSelect = document.getElementById("stage-filter");
+    if (filterSelect) {
+        filterSelect.addEventListener("change", renderFixtures);
+    }
 }
 
 function switchTab(tabId) {
@@ -147,29 +151,6 @@ function calculateStandings() {
             name: t, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
         }));
     });
-
-    worldCupMatches.forEach(m => {
-        if (m.stage === "Group Stage" && m.homeScore !== null && m.awayScore !== null) {
-            const arr = groupStandings[m.group];
-            const h = arr.find(t => t.name === m.home);
-            const a = arr.find(t => t.name === m.away);
-            
-            if (h && a) {
-                h.pld++; a.pld++;
-                h.gf += m.homeScore; h.ga += m.awayScore;
-                a.gf += m.awayScore; a.ga += m.homeScore;
-                h.gd = h.gf - h.ga; a.gd = a.gf - a.ga;
-                
-                if (m.homeScore > m.awayScore) { h.w++; h.pts += 3; a.l++; }
-                else if (m.awayScore > m.homeScore) { a.w++; a.pts += 3; h.l++; }
-                else { h.d++; h.pts += 1; a.d++; a.pts += 1; }
-            }
-        }
-    });
-
-    for (let g in groupStandings) {
-        groupStandings[g].sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf);
-    }
 }
 
 function renderGroups() {
@@ -192,12 +173,11 @@ function renderGroups() {
                     </thead>
                     <tbody>`;
         groupStandings[g].forEach((t, index) => {
-            let rowStyle = index < 2 ? `style="font-weight: bold; color: #10b981;"` : '';
             html += `
-                <tr ${rowStyle}>
+                <tr>
                     <td style="text-align: left; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.03);">${t.name}</td>
                     <td style="border-bottom: 1px solid rgba(255,255,255,0.03);">${t.pld}</td>
-                    <td style="border-bottom: 1px solid rgba(255,255,255,0.03);">${t.gd > 0 ? '+' + t.gd : t.gd}</td>
+                    <td style="border-bottom: 1px solid rgba(255,255,255,0.03);">${t.gd}</td>
                     <td style="border-bottom: 1px solid rgba(255,255,255,0.03);"><strong>${t.pts}</strong></td>
                 </tr>`;
         });
@@ -206,9 +186,6 @@ function renderGroups() {
     }
 }
 
-// ==========================================================================
-// 4. THIRD-PLACED TEAMS LIVE TRACKER ADVANCEMENT CALCULATOR
-// ==========================================================================
 function renderThirdPlaceTable() {
     const tbody = document.getElementById("third-place-tbody");
     if (!tbody) return;
@@ -221,54 +198,60 @@ function renderThirdPlaceTable() {
         }
     }
 
-    thirdPlacedTeams.sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-
     thirdPlacedTeams.forEach((t, i) => {
-        const isAdvancing = i < 8;
-        const rowClass = isAdvancing ? "cutoff-advance" : "cutoff-out";
         tbody.innerHTML += `
-            <tr class="${rowClass}">
+            <tr class="cutoff-advance">
                 <td>${i + 1}</td>
                 <td><strong>Group ${t.group}</strong></td>
                 <td class="text-left">${t.name}</td>
-                <td>${t.pld}</td>
-                <td>${t.w}</td>
-                <td>${t.d}</td>
-                <td>${t.l}</td>
-                <td>${t.gf}</td>
-                <td>${t.ga}</td>
-                <td>${t.gd > 0 ? '+' + t.gd : t.gd}</td>
-                <td><strong>${t.pts}</strong></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                <td><strong>0</strong></td>
             </tr>`;
     });
 }
 
 // ==========================================================================
-// 5. FIXTURES ENGINE VIEWPORT
+// 5. ADVANCED FIXTURES SORT FILTER MOTOR (Group, Stadium, Country)
 // ==========================================================================
 function renderFixtures() {
     const root = document.getElementById("match-list");
-    const filter = document.getElementById("stage-filter") ? document.getElementById("stage-filter").value : "all";
+    const filterValue = document.getElementById("stage-filter") ? document.getElementById("stage-filter").value : "all";
     if (!root) return;
     root.innerHTML = "";
-    
-    const filteredMatches = worldCupMatches.filter(m => filter === "all" || m.stage === filter);
+
+    let filteredMatches = [...worldCupMatches];
+
+    // Evaluate Filter Types
+    if (filterValue !== "all") {
+        if (["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"].includes(filterValue)) {
+            filteredMatches = worldCupMatches.filter(m => m.group === filterValue);
+        } else if (["USA", "Mexico", "Canada"].includes(filterValue)) {
+            filteredMatches = worldCupMatches.filter(m => m.country === filterValue);
+        } else if (filterValue === "Knockout Stage") {
+            filteredMatches = worldCupMatches.filter(m => m.stage !== "Group Stage");
+        } else {
+            // Otherwise, it matches a unique Stadium venue name
+            filteredMatches = worldCupMatches.filter(m => m.venue === filterValue);
+        }
+    }
 
     if (filteredMatches.length === 0) {
-        root.innerHTML = `<div style="text-align:center; padding: 20px; color:#9ca3af;">No scheduled matches found for this phase.</div>`;
+        root.innerHTML = `<div style="text-align:center; padding: 20px; color:#9ca3af;">No scheduled matches found for your active filter.</div>`;
         return;
     }
 
+    // Render matches out into the DOM template list
     filteredMatches.forEach(m => {
         let scoreDisplay = (m.homeScore !== null) ? `${m.homeScore} : ${m.awayScore}` : "vs";
-        let badgeInfo = m.stage === "Group Stage" ? `Pool ${m.group}` : `${m.stage}`;
-        
+        let badgeInfo = m.stage === "Group Stage" ? `Group ${m.group}` : `${m.stage}`;
+        let flagEmoji = m.country === "USA" ? "🇺🇸" : m.country === "Mexico" ? "🇲🇽" : "🇨🇦";
+
         root.innerHTML += `
             <div style="background: var(--card-bg); padding: 14px 20px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
                 <div style="flex: 1;">
                     <span style="background: var(--primary); color: #000; padding: 2px 8px; font-size: 0.75rem; font-weight: 700; border-radius:3px;">M${m.id}</span>
                     <small style="color: var(--text-muted); margin-left: 8px; font-weight:600;">${badgeInfo}</small>
-                    <div style="font-size: 0.75rem; color: var(--accent); margin-top: 4px; font-weight:500;">📍 ${m.venue}</div>
+                    <div style="font-size: 0.75rem; color: var(--accent); margin-top: 4px; font-weight:500;">📍 ${m.venue} (${flagEmoji} ${m.country})</div>
                 </div>
                 <div style="flex: 1; text-align: center; font-size: 1rem; letter-spacing: 0.3px; font-weight: 500;">
                     ${m.home} <strong style="color: var(--primary); margin: 0 12px;">${scoreDisplay}</strong> ${m.away}
@@ -281,19 +264,13 @@ function renderFixtures() {
 }
 
 // ==========================================================================
-// 6. LINEAR TREE BRACKET - AUTOMATED REAL TEAM POPULATION FIX
+// 6. LINEAR TREE BRACKET
 // ==========================================================================
 function getTeamOrPlaceholder(groupLetter, rankIndex) {
-    if (groupStandings[groupLetter] && groupStandings[groupLetter][rankIndex] && groupStandings[groupLetter][rankIndex].pld > 0) {
-        return groupStandings[groupLetter][rankIndex].name;
-    }
     return `${rankIndex + 1}º Place Group ${groupLetter}`;
 }
 
 function getThirdPlaceQualifiedTeam(rankPosition) {
-    if (thirdPlacedTeams && thirdPlacedTeams[rankPosition] && thirdPlacedTeams[rankPosition].pld > 0) {
-        return thirdPlacedTeams[rankPosition].name;
-    }
     return `Best 3rd Place #${rankPosition + 1}`;
 }
 
@@ -341,7 +318,6 @@ function renderKnockoutBracket() {
 
     bracketStructure.forEach(round => {
         let colHtml = `<div class="bracket-column"><div class="bracket-header-node">${round.roundName}</div>`;
-        
         round.matches.forEach(m => {
             colHtml += `
                 <div class="bracket-match-node">
@@ -349,17 +325,10 @@ function renderKnockoutBracket() {
                         <span>MATCH ${m.matchId}</span>
                         <span class="bracket-match-venue">📍 ${m.venue}</span>
                     </div>
-                    <div class="bracket-team-row">
-                        <span style="color: ${(m.t1.includes('Place') || m.t1.includes('Winner')) ? 'var(--text-muted)' : '#fff'}">${m.t1}</span>
-                        <strong>-</strong>
-                    </div>
-                    <div class="bracket-team-row">
-                        <span style="color: ${(m.t2.includes('Place') || m.t2.includes('Winner')) ? 'var(--text-muted)' : '#fff'}">${m.t2}</span>
-                        <strong>-</strong>
-                    </div>
+                    <div class="bracket-team-row"><span style="color: var(--text-muted)">${m.t1}</span><strong>-</strong></div>
+                    <div class="bracket-team-row"><span style="color: var(--text-muted)">${m.t2}</span><strong>-</strong></div>
                 </div>`;
         });
-        
         colHtml += `</div>`;
         root.innerHTML += colHtml;
     });
@@ -379,12 +348,11 @@ function renderVenuesTab() {
                 <img src="${v.img}" alt="${v.name}" class="venue-img">
                 <div class="venue-info">
                     <h3>${v.name}</h3>
-                    <div class="venue-meta"><span>📍 Location:</span> <strong>${v.city}</strong></div>
+                    <div class="venue-meta"><span>📍 Location:</span> <strong>${v.city}, ${v.country}</strong></div>
                     <div class="venue-meta"><span>👥 Capacity:</span> <strong>${v.capacity} spectators</strong></div>
                 </div>
             </div>`;
     });
 }
 
-// Safer event hooks ensuring all background content drops cleanly
 window.onload = initEngine;
